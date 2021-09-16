@@ -12,13 +12,14 @@ Pre-requisitos:
 Construir la imagen y ejecutar el container:
 
 ```bash
-# docker-compose up -d --build
+$ docker-compose up -d --build
 ```
 
 Detener container y eliminar imagen:
 
-
-
+```bash
+$ docker-compose down
+```
 
 ## Available Scripts
 
