@@ -2,6 +2,24 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Desarrollo con Docker
+
+Pre-requisitos:
+
+- [Docker](https://docs.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+Construir la imagen y ejecutar el container:
+
+```bash
+# docker-compose up -d --build
+```
+
+Detener container y eliminar imagen:
+
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
