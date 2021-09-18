@@ -6,13 +6,25 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Pre-requisitos:
 
-- [Docker](https://docs.docker.com/)
+- [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
 Construir la imagen y ejecutar el container:
 
 ```bash
 $ docker-compose up -d --build
+```
+
+Detener el contenedor:
+
+```bash
+$ docker-compose stop
+```
+
+Ejecutar contenedor:
+
+```bash
+$ docker-compose start
 ```
 
 Detener container y eliminar imagen:

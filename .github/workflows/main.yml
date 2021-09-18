@@ -1,0 +1,19 @@
+name: backoffice-deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HEROKU_APP: ubademy-backoffice
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.EP_HEROKU_API_KEY }}
+          heroku_app_name: ${{ env.HEROKU_APP }}
+          heroku_email: "eprediger@fi.uba.ar"
