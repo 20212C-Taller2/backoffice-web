@@ -17,3 +17,4 @@ jobs:
           heroku_api_key: ${{ secrets.EP_HEROKU_API_KEY }}
           heroku_app_name: ${{ env.HEROKU_APP }}
           heroku_email: "eprediger@fi.uba.ar"
+          usedocker: true
