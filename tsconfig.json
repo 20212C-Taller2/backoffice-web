@@ -20,7 +20,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src", "res"],
+  "exclude": ["node_modules", "build", "dist", "public"]
 }

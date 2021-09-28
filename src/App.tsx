@@ -1,17 +1,12 @@
-import ubademy from './ubademy.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={ubademy} className="App-logo" alt="logo" />
-        <p>
-          Ubademy
-        </p>
-      </header>
-    </div>
-  );
+import React from "react"
+import { UbademyRouter } from "./UbademyRouter"
+
+
+export const UbademyBackoffice = () => {
+
+  return(
+    <UbademyRouter/>
+  )
 }
 
-export default App;
