@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import IconButton from '@material-ui/core/IconButton';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
@@ -11,8 +11,11 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import React, { useState } from 'react';
 import iconUbademy from "../../res/images/ubademy.svg";
 import { useForm } from '../hooks/useForm';
+import isEmail from 'validator/lib/isEmail';
+import isEmpty from "validator/lib/isEmpty";
+import Alert from '@material-ui/lab/Alert';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -32,18 +35,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function Login(props) {
+interface State {
+  invalidEmail: boolean;
+  showPassword: boolean;
+  invalidCredentials: boolean;
+}
+
+export function Login(props): JSX.Element {
   const classes = useStyles();
+
   const [formValues, handleInputChange] = useForm({
     email: '',
     password: '',
   });
-  const [showPassword, setShowPassword] = useState(false);
 
   const { email, password } = formValues;
 
+  const [values, setValues] = useState<State>({
+    invalidEmail: false,
+    showPassword: false,
+    invalidCredentials: false
+  });
+
+
   const handleClickShowPassword = () => {
-    setShowPassword((showPassword) => !showPassword);
+    setValues({...values, showPassword: !values.showPassword});
+  }
+
+  const handleOnBlurEmail = () => {
+    setValues({...values, invalidEmail: !isEmpty(email) && !isEmail(email)});
   }
 
   const handleMouseDownPassword = (e) => {
@@ -52,8 +72,12 @@ export function Login(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("token", JSON.stringify({email, password}));
+    // TODO: CA 1: Login Exitoso
+    /*localStorage.setItem("token", JSON.stringify({email, password}));
     props.history.push("/home");
+    */
+    // TODO: CA 2: Login fallido (credenciales incorrectas)
+    setValues({...values, invalidCredentials: true});
   }
 
   return (
@@ -77,8 +101,11 @@ export function Login(props) {
             autoComplete="email"
             value={email}
             autoFocus
+            error={values.invalidEmail}
             onChange={handleInputChange}
+            onBlur={handleOnBlurEmail}
           />
+          {values.invalidEmail && <Alert severity="error">Formato de correo incorrecto</Alert>}
           <TextField
             variant="outlined"
             margin="normal"
@@ -86,7 +113,7 @@ export function Login(props) {
             fullWidth
             name="password"
             label="Contraseña"
-            type={showPassword ? "text" : "password"}
+            type={values.showPassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
             value={password}
@@ -98,10 +125,11 @@ export function Login(props) {
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                  {values.showPassword ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
             }}
           />
+          {values.invalidCredentials && <Alert severity="error">Correo electrónico o contraseña incorrecta</Alert>}
           <Button
             type="submit"
             fullWidth

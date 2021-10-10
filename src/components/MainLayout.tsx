@@ -1,16 +1,15 @@
-import React from "react"
-import { Row } from "../primitives/Flexbox"
-import { Col } from "../primitives/Flexbox"
-import { Picture } from "../primitives/Picture"
-import { Text } from "../primitives/Text"
-import iconUbademy from "../../res/images/ubademy.svg"
+import React from "react";
+import { Row } from "../primitives/Flexbox";
+import { Col } from "../primitives/Flexbox";
+import { Picture } from "../primitives/Picture";
+import { Text } from "../primitives/Text";
+import iconUbademy from "../../res/images/ubademy.svg";
 
 export const MainLayout = (
   props: {
     children?: React.ReactNode
   }
-) => {
-
+): JSX.Element => {
   return (
     <Col
         fill
