@@ -5,7 +5,6 @@ import { Picture } from "../primitives/Picture"
 import { Text } from "../primitives/Text"
 import iconUbademy from "../../res/images/ubademy.svg"
 
-
 export const MainLayout = (
   props: {
     children?: React.ReactNode
@@ -13,11 +12,11 @@ export const MainLayout = (
 ) => {
 
   return (
-    <Col 
-        fill 
+    <Col
+        fill
         style={{ backgroundColor: "lightblue" }}
     >
-        <Row height={"20%"} style={{ backgroundColor: "lightblue" }} alignChildren="center">
+        <Row height={"20%"} style={{ backgroundColor: "#282C34" }} alignChildren="center">
             <Picture
                 source={iconUbademy}
             />
