@@ -2,13 +2,15 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import React from 'react';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import React, { useState } from 'react';
 import iconUbademy from "../../res/images/ubademy.svg";
 import { useForm } from '../hooks/useForm';
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,8 +38,17 @@ export function Login(props) {
     email: '',
     password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const { email, password } = formValues;
+
+  const handleClickShowPassword = () => {
+    setShowPassword((showPassword) => !showPassword);
+  }
+
+  const handleMouseDownPassword = (e) => {
+    e.preventDefault();
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -61,6 +72,7 @@ export function Login(props) {
             fullWidth
             id="email"
             label="Correo Electrónico"
+            type="email"
             name="email"
             autoComplete="email"
             value={email}
@@ -74,11 +86,21 @@ export function Login(props) {
             fullWidth
             name="password"
             label="Contraseña"
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             autoComplete="current-password"
             value={password}
             onChange={handleInputChange}
+            InputProps={{
+              endAdornment: <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+            }}
           />
           <Button
             type="submit"
