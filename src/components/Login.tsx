@@ -57,13 +57,12 @@ export function Login(props): JSX.Element {
     invalidCredentials: false
   });
 
+  const handleOnBlurEmail = () => {
+    setValues({...values, invalidEmail: !isEmpty(email) && !isEmail(email)});
+  }
 
   const handleClickShowPassword = () => {
     setValues({...values, showPassword: !values.showPassword});
-  }
-
-  const handleOnBlurEmail = () => {
-    setValues({...values, invalidEmail: !isEmpty(email) && !isEmail(email)});
   }
 
   const handleMouseDownPassword = (e) => {
@@ -77,7 +76,7 @@ export function Login(props): JSX.Element {
     props.history.push("/home");
     */
     // TODO: CA 2: Login fallido (credenciales incorrectas)
-    setValues({...values, invalidCredentials: true});
+    /* setValues({...values, invalidCredentials: true}); */
   }
 
   return (
@@ -102,10 +101,10 @@ export function Login(props): JSX.Element {
             value={email}
             autoFocus
             error={values.invalidEmail}
+            helperText={values.invalidEmail && "Correo electrónico inválido"}
             onChange={handleInputChange}
             onBlur={handleOnBlurEmail}
           />
-          {values.invalidEmail && <Alert severity="error">Formato de correo incorrecto</Alert>}
           <TextField
             variant="outlined"
             margin="normal"
