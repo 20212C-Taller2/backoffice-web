@@ -1,4 +1,5 @@
 import { Avatar } from "@material-ui/core";
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -71,8 +72,9 @@ export const MainLayout = (
       fill
       style={{ backgroundColor: "lightblue" }}
     >
-      <Row height={"20%"} style={{ backgroundColor: "lightblue" }} alignChildren="center">
+      <Row style={{ backgroundColor: "#282C34" }} alignChildren="center">
         <Picture
+          style={{ maxHeight: "100%", width: "auto" }}
           source={iconUbademy}
         />
         <Text
@@ -80,10 +82,16 @@ export const MainLayout = (
           text={"Ubademy"}
           fontSize={40}
         />
-        <Avatar></Avatar>
-        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-          Hola
-        </Button>
+        <Box width="100%" display="flex" flexDirection="row" justifyContent="flex-end">
+          <Avatar></Avatar>
+          <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+            <Text
+              color={"white"}
+              text={"Hola"}
+              style={{textTransform: "initial"}}
+            />
+          </Button>
+        </Box>
         <StyledMenu
           id="simple-menu"
           anchorEl={anchorEl}
