@@ -8,12 +8,13 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Alert from '@material-ui/lab/Alert';
+import { History } from 'history';
 import React, { useState } from 'react';
-import iconUbademy from "../../res/images/ubademy.svg";
-import { useForm } from '../hooks/useForm';
 import isEmail from 'validator/lib/isEmail';
 import isEmpty from "validator/lib/isEmpty";
-import Alert from '@material-ui/lab/Alert';
+import iconUbademy from "../../res/images/ubademy.svg";
+import { useForm } from '../hooks/useForm';
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -41,7 +42,9 @@ interface State {
   invalidCredentials: boolean;
 }
 
-export function Login(props): JSX.Element {
+export function Login(props: {
+  history: History,
+}): JSX.Element {
   const classes = useStyles();
 
   const [formValues, handleInputChange] = useForm({
@@ -58,11 +61,11 @@ export function Login(props): JSX.Element {
   });
 
   const handleOnBlurEmail = () => {
-    setValues({...values, invalidEmail: !isEmpty(email) && !isEmail(email)});
+    setValues({ ...values, invalidEmail: !isEmpty(email) && !isEmail(email) });
   }
 
   const handleClickShowPassword = () => {
-    setValues({...values, showPassword: !values.showPassword});
+    setValues({ ...values, showPassword: !values.showPassword });
   }
 
   const handleMouseDownPassword = (e) => {
@@ -72,9 +75,8 @@ export function Login(props): JSX.Element {
   const handleSubmit = (e) => {
     e.preventDefault();
     // TODO: CA 1: Login Exitoso
-    /*localStorage.setItem("token", JSON.stringify({email, password}));
+    localStorage.setItem("token", JSON.stringify({ email, password }));
     props.history.push("/home");
-    */
     // TODO: CA 2: Login fallido (credenciales incorrectas)
     /* setValues({...values, invalidCredentials: true}); */
   }
@@ -83,7 +85,7 @@ export function Login(props): JSX.Element {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar src={iconUbademy} className={classes.avatar}/>
+        <Avatar src={iconUbademy} className={classes.avatar} />
         <Typography component="h1" variant="h5">
           Ubademy
         </Typography>
@@ -119,13 +121,13 @@ export function Login(props): JSX.Element {
             onChange={handleInputChange}
             InputProps={{
               endAdornment: <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                edge="end"
+              >
+                {values.showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
             }}
           />
           {values.invalidCredentials && <Alert severity="error">Correo electrónico o contraseña incorrecta</Alert>}

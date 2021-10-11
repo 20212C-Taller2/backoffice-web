@@ -1,12 +1,9 @@
-
-import React from "react"
-import { UbademyRouter } from "./UbademyRouter"
+import React from "react";
+import { UbademyRouter } from "./UbademyRouter";
 
 
 export const UbademyBackoffice = () => {
-
-  return(
-    <UbademyRouter/>
+  return (
+    <UbademyRouter />
   )
 }
-
