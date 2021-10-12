@@ -50,7 +50,7 @@ export const StringEditor = (
       disable={props.disable}
       readonly={props.readonly}
       showPassword={props.showPassword}
-      prefix={props.prefix}
+      prefixx={props.prefix}
       suffix={props.suffix}
     />
   )
@@ -65,7 +65,7 @@ const Input = (
     disable?: boolean
     readonly?: boolean
     showPassword?: State<boolean>
-    prefix?: React.ReactNode
+    prefixx?: React.ReactNode
     suffix?: React.ReactNode
   }
 ) =>
@@ -82,7 +82,7 @@ const Input = (
     disabled={props.disable}
     InputProps={{
       readOnly: props.readonly,
-      startAdornment: props.prefix,
+      startAdornment: props.prefixx,
       endAdornment: props.type === "password" && props.showPassword !== undefined?
         <IconButton
           aria-label="toggle password visibility"

@@ -1,70 +1,69 @@
-import { Avatar } from "@material-ui/core";
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Menu, { MenuProps } from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { withStyles } from '@material-ui/core/styles';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { History } from 'history';
-import React, { useState } from "react";
-import iconUbademy from "../../res/images/ubademy.svg";
-import { Col, Row } from "../primitives/Flexbox";
-import { Picture } from "../primitives/Picture";
-import { Text } from "../primitives/Text";
+import { Avatar } from "@material-ui/core"
+import Box from "@material-ui/core/Box"
+import Button from "@material-ui/core/Button"
+import ListItemIcon from "@material-ui/core/ListItemIcon"
+import ListItemText from "@material-ui/core/ListItemText"
+import Menu, { MenuProps } from "@material-ui/core/Menu"
+import MenuItem from "@material-ui/core/MenuItem"
+import { withStyles } from "@material-ui/core/styles"
+import ExitToAppIcon from "@material-ui/icons/ExitToApp"
+import { History } from "history"
+import React, { useState } from "react"
+import iconUbademy from "../../res/images/ubademy.svg"
+import { Col, Row } from "../primitives/Flexbox"
+import { Picture } from "../primitives/Picture"
+import { Text } from "../primitives/Text"
 
 
 const StyledMenu = withStyles({
   paper: {
-    border: '1px solid #d3d4d5',
+    border: "1px solid #d3d4d5",
   },
 })((props: MenuProps) => (
   <Menu
     elevation={0}
     getContentAnchorEl={null}
     anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
+      vertical: "bottom",
+      horizontal: "center",
     }}
     transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
+      vertical: "top",
+      horizontal: "center",
     }}
     {...props}
   />
-));
+))
 
 const StyledMenuItem = withStyles((theme) => ({
   root: {
-    '&:focus': {
+    "&:focus": {
       backgroundColor: theme.palette.primary.main,
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
         color: theme.palette.common.white,
       },
     },
   },
-}))(MenuItem);
+}))(MenuItem)
 
 export const MainLayout = (
   props: {
     children?: React.ReactNode,
-    history: History
   }
-): JSX.Element => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleLogOut = () => {
-    localStorage.removeItem('token');
-    props.history.push("/");
+    localStorage.removeItem("token")
+    props.history.push("/")
   }
 
   return (

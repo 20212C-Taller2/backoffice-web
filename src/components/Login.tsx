@@ -33,17 +33,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }))
 
-type LoginState = {
-  invalidEmail: boolean;
-  showPassword: boolean;
-  invalidCredentials: boolean;
-}
 
-export const Login = (
-  props: {
-    history: History
-  }
-) => {
+export const Login = () => {
   const classes = useStyles()
 
   const credentials = useStatefull(
