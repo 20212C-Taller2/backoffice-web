@@ -28,6 +28,16 @@ export const stringCodec: Codec<string, Json> = {
   decode: value => StringT.check(value) ? value : throwError({name: `${value}`, message: `${value} is not a string`} )
 }
 
+export const booleanCodec: Codec<boolean, Json> = {
+  encode: id,
+  decode: value => BooleanT.check(value) ? value : throwError({name: `${value}`, message:`${value} is not a boolean`})
+}
+
+export const BooleanT: Model<boolean> = {
+  codec: booleanCodec,
+  check: (value): value is boolean => typeof value === "boolean"
+}
+
 export const StringT: Model<string> = {
   codec: stringCodec,
   check: (value): value is string => typeof value === "string"
@@ -38,8 +48,17 @@ export const jsonToStringCodec: Codec<Json, string> = {
   decode: encoded => JSON.parse(encoded)
 }
 
+const UserT = ProductOf({
+  id: StringT,
+  firstName: StringT,
+  lastName: StringT,
+  email: StringT
+})
+
 export const CredentialsT = ProductOf({
-  token: StringT
+  auth: BooleanT,
+  token: StringT,
+  user: UserT
 })
 
 export type Credentials = Obtain<typeof CredentialsT>

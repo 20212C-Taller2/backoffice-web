@@ -1,6 +1,6 @@
 import { Async } from "../utils/asynchronism"
 import { IO } from "../utils/functional"
-import { Credentials, StringT } from "../utils/serialization"
+import { Credentials, CredentialsT } from "../utils/serialization"
 import { httpUser } from "./HttpUser"
 
 export type VisitorUser = {
@@ -26,23 +26,24 @@ export const buildVisitorUser = (
   
     actions: {
       login: (args: {username: string, password: string} ) => async () => {
-        //const credentials  = await login(runtime, args.username, args.password)()
-        const bodyLogin = {
-          mode: "raw",
-          raw: {
-            email: "admin@gmail.com",
-            password: "123456"
-          }
-        }
 
-        const token  =  await httpVisitorUser.post(
-          "https://ubademy-users-api.herokuapp.com/login/admin", 
+        const bodyLogin = {email: "admin@gmail.com", password: "123456"}
+        
+        const fetchCredentials  =  await httpVisitorUser.post(
+          "/login/admin", 
           JSON.stringify(bodyLogin),
-          StringT
+          CredentialsT
         )()
 
         const credentials: Credentials = {
-          token: token
+          auth: fetchCredentials.auth,
+          token: fetchCredentials.token,
+          user: {
+            id: fetchCredentials.user.id,
+            firstName: fetchCredentials.user.firstName,
+            lastName: fetchCredentials.user.lastName,
+            email: fetchCredentials.user.email
+          }
         }
 
         setCredentials(credentials)()

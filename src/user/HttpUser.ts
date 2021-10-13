@@ -28,17 +28,26 @@ export const httpRequest = <T>(
   }
 ): Async<T> => 
     async () => {
-      const response = await fetch("https://ubademy-users-api.herokuapp.com/", { 
+      console.log(args.method)
+      console.log(args.url)
+      console.log(args.contentType)
+      console.log(args.authToken)
+      console.log(args.body)
+      console.log(args.resultType)
+      const headers1 = filterNotNone([
+        args.contentType !== undefined ? ["Content-Type", args.contentType] : undefined,
+        args.authToken !== undefined ? ["Authorization", `Bearer ${args.authToken}`] : undefined, 
+      ]) as string[][]
+      console.log(headers1)
+      const response = await fetch("https://ubademy-users-api.herokuapp.com" + args.url, { 
         method: args.method, 
         mode: "cors",
-        headers: filterNotNone([
-          args.contentType !== undefined ? ["Content-Type", args.contentType] : undefined,
-          args.authToken !== undefined ? ["Authorization", `Bearer ${args.authToken}`] : undefined, 
-        ]) as string[][],
+        headers: headers1,
         body: args.body
       })
+      // si pongo esto en none me tira sorry password o user incorret
       checkStatus(response.status)
-      
+      console.log(response.status)
       return args.resultType as never as Model<void> === VoidT ? 
         undefined as never as T : 
         args.resultType.codec.decode(await response.json())
