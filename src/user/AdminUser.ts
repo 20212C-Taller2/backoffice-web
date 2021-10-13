@@ -1,6 +1,6 @@
 import { IO } from "../utils/functional"
+import { Credentials } from "../utils/serialization"
 import { State } from "../utils/state"
-import { Credentials } from "./user"
 
 export type AdminUser = {
   type: "admin"
@@ -29,5 +29,4 @@ export const buildAdminUser = (
     }
   }
 }
-  
-  
+

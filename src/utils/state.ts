@@ -1,5 +1,8 @@
-import { useMemo, useState } from "react"
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useMemo, useState } from "react"
+import { ifCatch } from "./error"
 import { IO } from "./functional"
+import { Codec } from "./serialization"
 
 export type State<S> = {
     value: S
@@ -50,3 +53,38 @@ export const applyLens = <S, P>(
         ) 
       )
   })
+
+export const usePersistentState = <T,>(
+  key: string,
+  codec: Codec<T, string>, 
+  initial: T
+): State<T> => {
+  
+  const state = useStatefull<T>(() => {
+    const serialized = localStorage.getItem(key)
+    if(serialized === null) return initial
+    return ifCatch(() => codec.decode(serialized), initial)
+  })
+  
+  useEffect(() => {
+  
+    if (state.value === undefined) {
+      localStorage.removeItem(key)
+    } else {
+      localStorage.setItem(key, codec.encode(state.value))
+    }
+  }, [key, state.value])
+  
+  return state
+}
+
+
+export const definedState = <S>(state: State<S | undefined>): State<S> | undefined => 
+  state.value === undefined ? undefined : {
+    value: state.value,
+    apply: transition => 
+      state.apply(previous => 
+        previous !== undefined ?  transition(previous) : previous
+      )
+  }
+

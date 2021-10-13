@@ -12,7 +12,7 @@ export const useForm = (initialState = {}) => {
       ...currentFields,
       [target.name]: target.value,
     }))
-  };
+  }
 
   return [fields, handleInputChange, reset]
-};
+}

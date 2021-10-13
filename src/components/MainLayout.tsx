@@ -7,12 +7,13 @@ import Menu, { MenuProps } from "@material-ui/core/Menu"
 import MenuItem from "@material-ui/core/MenuItem"
 import { withStyles } from "@material-ui/core/styles"
 import ExitToAppIcon from "@material-ui/icons/ExitToApp"
-import { History } from "history"
 import React, { useState } from "react"
 import iconUbademy from "../../res/images/ubademy.svg"
+import { useUbademyUser } from "../hooks/context"
 import { Col, Row } from "../primitives/Flexbox"
 import { Picture } from "../primitives/Picture"
 import { Text } from "../primitives/Text"
+import { nop } from "../utils/functional"
 
 
 const StyledMenu = withStyles({
@@ -51,6 +52,8 @@ export const MainLayout = (
     children?: React.ReactNode,
   }
 ) => {
+  const ubademyUser = useUbademyUser()
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -59,11 +62,6 @@ export const MainLayout = (
 
   const handleClose = () => {
     setAnchorEl(null)
-  }
-
-  const handleLogOut = () => {
-    localStorage.removeItem("token")
-    props.history.push("/")
   }
 
   return (
@@ -81,34 +79,41 @@ export const MainLayout = (
           text={"Ubademy"}
           fontSize={40}
         />
-        <Box width="100%" display="flex" flexDirection="row" justifyContent="flex-end">
-          <Avatar></Avatar>
-          <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-            <Text
-              color={"white"}
-              text={"Hola"}
-              style={{textTransform: "initial"}}
-            />
-          </Button>
-        </Box>
-        <StyledMenu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          <StyledMenuItem onClick={handleLogOut}>
-            <ListItemIcon>
-              <ExitToAppIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary="Cerrar sesión" />
-          </StyledMenuItem>
-        </StyledMenu>
+        {
+          ubademyUser?.type === "admin" ?
+            <>
+              <Box width="100%" display="flex" flexDirection="row" justifyContent="flex-end">
+                <Avatar></Avatar>
+                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                  <Text
+                    color={"white"}
+                    text={"Hola"}
+                    style={{textTransform: "initial"}}
+                  />
+                </Button>
+              </Box>
+              <StyledMenu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <StyledMenuItem onClick={nop}>
+                  <ListItemIcon>
+                    <ExitToAppIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Cerrar sesión" />
+                </StyledMenuItem>
+              </StyledMenu>
+            </> : 
+            null
+        }
       </Row>
       <Col fill style={{ backgroundColor: "white" }}>
         {props.children}
       </Col>
+     
     </Col>
   )
 }

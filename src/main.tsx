@@ -1,11 +1,11 @@
 import React from "react"
 import { render } from "react-dom"
-import { UbademyBackoffice } from "./App"
+import { UbademyBackofficeApp } from "./App"
 import "regenerator-runtime"
 
 
 render(
-  <UbademyBackoffice/>,
+  <UbademyBackofficeApp/>,
   document.getElementById("react-target")
 )
 

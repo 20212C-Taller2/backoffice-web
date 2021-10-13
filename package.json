@@ -33,6 +33,7 @@
   "scripts": {
     "start": "parcel src/index.html",
     "build": "parcel build src/index.html --out-dir build/",
+    "watch-typecheck": "tsc --watch --noEmit",
     "typecheck": "tsc --noEmit",
     "lint": "eslint 'src/**/*.ts?(x)'"
   },

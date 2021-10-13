@@ -1,6 +1,8 @@
-import React from 'react'
-import { Redirect, Route } from 'react-router-dom'
+import React from "react"
+import { Redirect, Route } from "react-router-dom"
 import { MainLayout } from "..//components/MainLayout"
+import { Col } from "../primitives/Flexbox"
+import { Text } from "../primitives/Text"
 
 
 export const PrivateRoute =(
@@ -9,12 +11,8 @@ export const PrivateRoute =(
   }
 )=> {
   return (
-    <>
-      render={props => localStorage.getItem("token") ?
-        <MainLayout {...props}>
-          <Component {...props} />
-        </MainLayout> :
-        <Redirect to={"/"} />
-      } />
+    <Col>
+      <Text text={"TE LOGUEASTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"}/>
+    </Col>
   )
 }

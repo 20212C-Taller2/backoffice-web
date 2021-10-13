@@ -3,7 +3,6 @@ import Button from "@material-ui/core/Button"
 import { makeStyles, Theme } from "@material-ui/core/styles"
 import Lock from "@material-ui/icons/Lock"
 import Person from "@material-ui/icons/Person"
-import { History } from "history"
 import iconUbademy from "../../res/images/ubademy.svg"
 import { Col } from "../primitives/Flexbox"
 import { Picture } from "../primitives/Picture"
@@ -12,6 +11,8 @@ import { Text } from "../primitives/Text"
 import { nop } from "../utils/functional"
 import { applyLens, lens, useStatefull } from "../utils/state"
 import { Frame } from "../primitives/Frame"
+import { useVisitorUser } from "../hooks/context"
+import { useAsynchronous } from "../utils/asynchronism"
 
 const useStyles = makeStyles((theme: Theme) => ({
   paper: {
@@ -44,16 +45,10 @@ export const Login = () => {
     })
   )
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // TODO: CA 1: Login Exitoso
-    localStorage.setItem("token", JSON.stringify({ email, password }))
-    props.history.push("/home")
-    // TODO: CA 2: Login fallido (credenciales incorrectas)
-    /* setValues({...values, invalidCredentials: true}); */
-  }
-
   const showPassword = useStatefull<boolean>(() => false)
+
+  const visitorUser = useVisitorUser()
+  const login = useAsynchronous(visitorUser.actions.login)
 
   return (
     <Frame
@@ -97,7 +92,7 @@ export const Login = () => {
           variant="contained"
           color="primary"
           className={classes.submit}
-          onClick={handleSubmit}
+          onClick={login.run({username: "", password: ""})}
         >
             Ingresar
         </Button>
