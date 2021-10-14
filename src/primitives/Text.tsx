@@ -9,10 +9,10 @@ export const Text = (
     text?: string
     fontSize?: number | string
     fontStyle?: "normal" | "italic" | "oblique"
-    textAlign?: "center" | "left" | "right" | "justify"
     children?: React.ReactNode
+    prefix?: boolean
     bold?: boolean
-    align?: AlignText
+    textAlign?: AlignText
     noWrap?: boolean
   }
 ) => <Typography
@@ -20,16 +20,15 @@ export const Text = (
     fontSize: props.fontSize,
     fontWeight: props.bold === true ? "bold" : "initial",
     fontStyle: props.fontStyle,
-    textAlign: props.textAlign,
     color: typeof props.color === "string" ? props.color :  props.color,
     ...buildStyle(props)
   }}
-  align={props.align}
+  align={props.textAlign}
   onClick={props.onClick}
   noWrap={props.noWrap??false}
 >
-  {props.text}
-  {props.children}
+  {props.prefix === true ? props.children : props.text}
+  {props.prefix === true? props.text : props.children}
 </Typography>
 
 export type AlignText = "inherit" | "left" | "center" | "right" | "justify" | undefined 

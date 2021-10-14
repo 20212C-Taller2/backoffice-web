@@ -19,7 +19,7 @@ export const buildVisitorUser = (
   setCredentials: (credential: Credentials) => IO<void>,
 ): VisitorUser =>  {
     
-  const httpVisitorUser = httpUser()
+  
   
   return {
     type: "visitor",
@@ -27,7 +27,12 @@ export const buildVisitorUser = (
     actions: {
       login: (args: {username: string, password: string} ) => async () => {
 
-        const bodyLogin = {email: args.username, password: args.password}
+        const httpVisitorUser = httpUser()
+        
+        const bodyLogin = {
+          email: args.username, 
+          password: args.password
+        }
         
         const fetchCredentials  =  await httpVisitorUser.post(
           "/login/admin", 

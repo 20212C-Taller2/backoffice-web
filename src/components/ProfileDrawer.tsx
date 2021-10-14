@@ -8,6 +8,8 @@ import { AvatarInitials } from "./DrawerButton"
 import Check from "@material-ui/icons/Check"
 import { Frame } from "../primitives/Frame"
 import ExitToAppIcon from "@material-ui/icons/ExitToApp"
+import { sequenceIO } from "../utils/functional"
+import { useNavigation } from "../hooks/navigation"
 
 export const ProfileDrawer = (
   props: {
@@ -17,6 +19,7 @@ export const ProfileDrawer = (
   
   const adminUser = useAdminUser()
   const adminData = adminUser.credentials.user
+  const navigation = useNavigation()
 
   return(
     <Drawer
@@ -61,7 +64,7 @@ export const ProfileDrawer = (
         </Row>
         <Button
           style={{marginBottom: 40, backgroundColor: "#484C44", borderRadius: 5, padding: 10}}
-          onClick={adminUser.actions.logout}
+          onClick={sequenceIO([navigation.goTo.login, adminUser.actions.logout])}
         >
           <ExitToAppIcon
             style={{color:"white"}}

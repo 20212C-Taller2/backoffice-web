@@ -21,7 +21,8 @@ export const Navbar = () => {
       padding={5}
     >
       <Row
-        alignChildren="center" 
+        alignChildren="center"
+        onClick={navigation.goTo.home} 
       >
         <Picture
           style={{ maxHeight: "100%", width: "auto" }}
