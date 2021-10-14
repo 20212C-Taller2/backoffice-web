@@ -1,6 +1,5 @@
 import React from "react"
 import Button from "@material-ui/core/Button"
-import { makeStyles, Theme } from "@material-ui/core/styles"
 import Lock from "@material-ui/icons/Lock"
 import Person from "@material-ui/icons/Person"
 import iconUbademy from "../../res/images/ubademy.svg"
@@ -13,30 +12,11 @@ import { applyLens, lens, useStatefull } from "../utils/state"
 import { Frame } from "../primitives/Frame"
 import { useVisitorUser } from "../hooks/context"
 import { useAsynchronous } from "../utils/asynchronism"
-
-const useStyles = makeStyles((theme: Theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  avatar: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-  },
-}))
+import { Loading } from "../primitives/Loading"
+import { Alert } from "@material-ui/lab"
 
 
 export const Login = () => {
-  const classes = useStyles()
 
   const credentials = useStatefull(
     () => ({
@@ -49,6 +29,7 @@ export const Login = () => {
 
   const visitorUser = useVisitorUser()
   const login = useAsynchronous(visitorUser.actions.login)
+  const runLogin = login.run({username: credentials.value.username, password: credentials.value.password})
 
   return (
     <Frame
@@ -71,7 +52,7 @@ export const Login = () => {
           state={applyLens(credentials, lens("username"))}
           showErrors={false}
           errorList={["Usuario o contraseña incorrecta"]}
-          onKeyPressed={key => key === "Enter" ? nop : nop }
+          onKeyPressed={key => key === "Enter" ? runLogin : nop }
         />
         <StringEditor 
           style={{ width: "100%" }}
@@ -82,18 +63,27 @@ export const Login = () => {
           type="password"
           showErrors={false}
           state={applyLens(credentials, lens("password"))}
-          onKeyPressed={key => key === "Enter" ? nop : nop }
+          onKeyPressed={key => key === "Enter" ? runLogin : nop }
           showPassword={showPassword}
         /> 
-        {/*values.invalidCredentials && <Alert severity="error">Correo electrónico o contraseña incorrecta</Alert>*/}
+        {
+          login.status === "failed" ? 
+            <Alert style={{marginTop: 15}} severity="error">Correo electrónico o contraseña incorrecta</Alert> : 
+            null
+        }
         <Button
           type="submit"
           fullWidth
           variant="contained"
           color="primary"
-          className={classes.submit}
-          onClick={login.run({username: "", password: ""})}
+          style={{marginTop: 30}}
+          onClick={runLogin}
         >
+          {
+            login.status === "running" ?
+              <Loading style={{ width: 25, height: 25, marginRight: 15, color: "white" }}/> 
+              : null 
+          }
             Ingresar
         </Button>
       </Col>

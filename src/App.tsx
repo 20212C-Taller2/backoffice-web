@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo } from "react"
 import { AdminUser } from "./user/AdminUser"
 import { buildUser } from "./user/user"
@@ -6,10 +7,16 @@ import { UbademyRouter } from "./UbademyRouter"
 import { State, usePersistentState } from "./utils/state"
 import { UserContext } from "./hooks/context"
 import { Credentials, CredentialsT, OptionalOf, stringCodecOf } from "./utils/serialization"
+import { useQueryClient } from "react-query"
 
 const useUser = (credentials: State<Credentials | undefined>): AdminUser | VisitorUser => {
 
-  const user = useMemo(() => buildUser(credentials), [credentials])
+  const queryClient = useQueryClient()
+
+  const user = useMemo(
+    () => buildUser(credentials, queryClient), 
+    [credentials]
+  )
 
   return user
 }

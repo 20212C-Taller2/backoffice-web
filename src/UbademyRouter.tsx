@@ -2,7 +2,8 @@ import React from "react"
 import { BrowserRouter as Router, Route } from "react-router-dom"
 import { Login } from "./components/Login"
 import { MainLayout } from "./components/MainLayout"
-import { PrivateRoute } from "./routes/PrivateRoute"
+import { paths } from "./hooks/navigation"
+import { AddAdministratorPage } from "./routes/PrivateRoute"
 import { UdemyUser } from "./user/user"
 
 
@@ -16,12 +17,9 @@ export const UbademyRouter = (
       <MainLayout>
         {
           props.user.type === "visitor"?
-            <Route exact path={["/", "/login"]}>
-              <Login />
-            </Route> :
-            <Route path={"/home"}>
-              <PrivateRoute />
-            </Route>
+            <VisitorRoutes/> :
+            <AdminRoutes/>
+
         
           /*
             Administracion de usuarios (listar, ver perfil)
@@ -35,4 +33,23 @@ export const UbademyRouter = (
       </MainLayout>
     </Router>
   )
+}
+
+const VisitorRoutes = () => {
+
+  return(
+    <Route exact path={["/", paths.login]}>
+      <Login />
+    </Route>
+  ) 
+}
+
+
+const AdminRoutes = () => {
+
+  return(
+    <Route path={paths.addAdmin}>
+      <AddAdministratorPage />
+    </Route>
+  ) 
 }

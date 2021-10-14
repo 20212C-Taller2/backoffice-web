@@ -6,6 +6,8 @@ export type AdminUser = {
   type: "admin"
   
   actions: AdminActions
+
+  credentials: Credentials
 }
 
 
@@ -26,7 +28,9 @@ export const buildAdminUser = (
   
     actions: {
       logout: logout
-    }
+    },
+
+    credentials: credentials.value
   }
 }
 

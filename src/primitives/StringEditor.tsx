@@ -74,11 +74,6 @@ const Input = (
     rows={props.rows}
     value={props.state !== undefined ? props.state?.value : props.value}
     onChange={event => props.state !== undefined ? setTo(props.state, event.target.value)() : undefined}
-    type={
-      props.showPassword === undefined ? 
-        "text" : 
-        props.showPassword.value ? "text" : "password"
-    }
     disabled={props.disable}
     InputProps={{
       readOnly: props.readonly,
@@ -94,4 +89,9 @@ const Input = (
         </IconButton> : props.suffix
     }}
     {...props}
+    type={
+      props.showPassword === undefined ? 
+        "text" : 
+        props.showPassword.value ? "text" : "password"
+    }
   />

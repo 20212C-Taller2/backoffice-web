@@ -27,11 +27,11 @@ export const buildVisitorUser = (
     actions: {
       login: (args: {username: string, password: string} ) => async () => {
 
-        const bodyLogin = {email: "admin@gmail.com", password: "123456"}
+        const bodyLogin = {email: args.username, password: args.password}
         
         const fetchCredentials  =  await httpVisitorUser.post(
           "/login/admin", 
-          JSON.stringify(bodyLogin),
+          bodyLogin,
           CredentialsT
         )()
 
