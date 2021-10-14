@@ -1,11 +1,72 @@
 {
-  "root": true,
-  "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "env": {
+      "browser": true,
+      "commonjs": true,
+      "es2021": true
+  },
   "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
-  ]
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+      "ecmaFeatures": {
+          "tsx": true
+      },
+      "ecmaVersion": 12,
+      "project": "tsconfig.json"
+  },
+  "plugins": [
+      "react",
+      "@typescript-eslint",
+      "react-hooks"
+  ],
+  "rules": {
+      "indent": [
+          "warn",
+          2
+      ],
+      "linebreak-style": [
+          "error",
+          "unix"
+      ],
+      "quotes": [
+          "warn",
+          "double"
+      ],
+      "semi": [
+          "warn",
+          "never"
+      ],
+      "@typescript-eslint/await-thenable": "error",
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/no-unused-expressions": "warn",
+      "@typescript-eslint/strict-boolean-expressions": [
+          "error",
+          {
+              "allowString": false,
+              "allowNumber": false,
+              "allowNullableObject": false
+          }
+      ],
+      "no-implicit-coercion": "error",
+      "react/no-children-prop": "off",
+      "react/display-name": "off",
+      "react/prop-types": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      "no-restricted-imports": [
+        "error",
+        {
+          "paths": ["@material-ui/icons"],
+          "patterns": ["@material-ui/icons/*/*", "!@material-ui/core/test-utils/*"]
+        }
+      ]
+  },
+  "settings": {
+      "react": {
+          "version": "detect"
+      }
+  }
 }

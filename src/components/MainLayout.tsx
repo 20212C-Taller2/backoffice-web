@@ -1,36 +1,22 @@
 import React from "react"
-import { Row } from "../primitives/Flexbox"
 import { Col } from "../primitives/Flexbox"
-import { Picture } from "../primitives/Picture"
-import { Text } from "../primitives/Text"
-import iconUbademy from "../../res/images/ubademy.svg"
-
+import { Navbar } from "./Navbar"
 
 export const MainLayout = (
   props: {
-    children?: React.ReactNode
+    children?: React.ReactNode,
   }
 ) => {
 
   return (
-    <Col 
-        fill 
-        style={{ backgroundColor: "lightblue" }}
+    <Col
+      fill 
     >
-        <Row height={"20%"} style={{ backgroundColor: "lightblue" }} alignChildren="center">
-            <Picture
-                source={iconUbademy}
-            />
-            <Text
-                color={"white"}
-                text={"Ubademy"}
-                fontSize={40}
-            />
-        </Row>
-        <Col fill style={{ backgroundColor: "white" }}>
-            {props.children}
-        </Col>
+      <Navbar/>
+      <Col fill >
+        {props.children}
+      </Col>
+     
     </Col>
   )
 }
-
