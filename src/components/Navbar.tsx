@@ -22,7 +22,8 @@ export const Navbar = () => {
     >
       <Row
         alignChildren="center"
-        onClick={navigation.goTo.home} 
+        onClick={navigation.goTo.home}
+        style={{cursor: "pointer"}} 
       >
         <Picture
           style={{ maxHeight: "100%", width: "auto" }}
