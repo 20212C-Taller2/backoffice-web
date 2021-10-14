@@ -1,25 +1,57 @@
 import React from "react"
-import { BrowserRouter as Router, Redirect, Route } from "react-router-dom"
-import { Home } from "./components/Home"
-import { Login } from "./components/Login"
-import { PrivateRoute } from "./routes/PrivateRoute"
+import { BrowserRouter as Router, Route } from "react-router-dom"
+import { Login } from "./pages/LoginPage"
+import { MainLayout } from "./components/MainLayout"
+import { paths } from "./hooks/navigation"
+import { AddAdministratorPage } from "./pages/AddAdministratorPage"
+import { UdemyUser } from "./user/user"
+import { Home } from "./pages/Home"
 
 
-export const UbademyRouter = () => {
+export const UbademyRouter = (
+  props: {
+    user: UdemyUser
+  }
+) => {
   return (
     <Router>
-      <Route exact path={"/"} render={(props: any) => localStorage.getItem("token") ?
-        <Redirect to={"/home"} /> :
-        <Login {...props} />
-      }>
-        {/*
+      <MainLayout>
+        {
+          props.user.type === "visitor"?
+            <VisitorRoutes/> :
+            <AdminRoutes/>
+        /*
             Administracion de usuarios (listar, ver perfil)
             Administrar cursos
             Ver estadisticas
             Perfil ?
-        */}
-      </Route>
-      <PrivateRoute exact path={"/home"} component={Home} />
+        */      
+        }
+      </MainLayout>
     </Router>
   )
+}
+
+const VisitorRoutes = () => {
+
+  return(
+    <Route exact path={["/", paths.login]}>
+      <Login />
+    </Route>
+  ) 
+}
+
+
+const AdminRoutes = () => {
+
+  return(
+    <>
+      <Route path={[paths.home]}>
+        <Home />
+      </Route>
+      <Route path={paths.addAdmin}>
+        <AddAdministratorPage />
+      </Route>
+    </>
+  ) 
 }

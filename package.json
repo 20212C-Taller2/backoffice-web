@@ -19,6 +19,8 @@
     "react-dom": "^16.8.0 || ^17.0.0",
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
+    "react-async": "10.0.1",
+    "react-query": "3.5.12",
     "validator": "^13.6.0",
     "web-vitals": "^1.1.2"
   },
@@ -32,6 +34,7 @@
   "scripts": {
     "start": "parcel src/index.html",
     "build": "parcel build src/index.html --out-dir build/",
+    "watch-typecheck": "tsc --watch --noEmit",
     "typecheck": "tsc --noEmit",
     "lint": "eslint 'src/**/*.ts?(x)'"
   },
