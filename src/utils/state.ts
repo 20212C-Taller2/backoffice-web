@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from "react"
+import { Codec } from "./codec"
 import { ifCatch } from "./error"
 import { IO } from "./functional"
-import { Codec } from "./serialization"
 
 export type State<S> = {
     value: S

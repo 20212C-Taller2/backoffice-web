@@ -6,6 +6,7 @@ import { paths } from "./hooks/navigation"
 import { AddAdministratorPage } from "./pages/AddAdministratorPage"
 import { UdemyUser } from "./user/user"
 import { Home } from "./pages/Home"
+import { UsersPage } from "./pages/UsersPage"
 
 
 export const UbademyRouter = (
@@ -46,11 +47,14 @@ const AdminRoutes = () => {
 
   return(
     <>
-      <Route path={[paths.home]}>
+      <Route path={paths.home}>
         <Home />
       </Route>
       <Route path={paths.addAdmin}>
         <AddAdministratorPage />
+      </Route>
+      <Route path={paths.users}>
+        <UsersPage />
       </Route>
     </>
   ) 

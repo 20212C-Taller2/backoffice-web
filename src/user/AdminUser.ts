@@ -1,6 +1,7 @@
 import { Async } from "../utils/asynchronism"
 import { IO } from "../utils/functional"
-import { Credentials, VoidT } from "../utils/serialization"
+import { List } from "../utils/list"
+import { Credentials, UserData, UserDataList, UserListT, VoidT } from "../utils/serialization"
 import { State } from "../utils/state"
 import { httpUser } from "./HttpUser"
 
@@ -19,6 +20,8 @@ export type AdminActions = {
 
   registerAdmin: (args: { firstName: string, lastName: string, email: string, password: string }) => Async<void>
 
+  getUsers: (args: { credentials: Credentials}) => Async<List<UserData>>
+
 }
 
 
@@ -34,7 +37,9 @@ export const buildAdminUser = (
       
       logout: logout,
 
-      registerAdmin: registerAdminAsync
+      registerAdmin: registerAdminAsync,
+
+      getUsers: getUsers
 
     },
 
@@ -65,4 +70,21 @@ export const registerAdminAsync = (
     registerAdminBody,
     VoidT
   )()
+}
+
+export const getUsers = (
+  args:{
+    credentials: Credentials
+  }
+): Async<List<UserData>> => async() => {
+
+  const token = args.credentials.token
+  const httpAdminUser = httpUser(token)
+
+  const userList = await httpAdminUser.get(
+    "/users", 
+    UserListT
+  )()
+
+  return userList.users
 }

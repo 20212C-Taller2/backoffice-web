@@ -1,6 +1,5 @@
+import { Codec, listCodec } from "./codec"
 import { List } from "./list"
-import { Codec } from "./serialization"
-
 
 export type Json = unknown
 
@@ -43,6 +42,13 @@ export const codecProduct = <A extends Record<keyof never, unknown>>(
     )
   }
 }
+
+export const ListOf = <T>(
+  model: Model<T>
+): Model<List<T>> => ({
+    codec: listCodec(model.codec),
+    check: (value): value is List<T> => Array.isArray(value) && all(value, model.check)
+  })
 
 export const ProductOf = <A extends Record<keyof never, unknown>>(
   product: {

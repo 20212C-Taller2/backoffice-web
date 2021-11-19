@@ -19,4 +19,8 @@ export const enumMatch = <T extends string>(value: T) => <R>(cases: Record<T, R>
 
 export const letIn = <E, R>(value: E, lambda: (value: E) => R): R => lambda(value)
 
-
+export const optionalMap = <T, R>(
+  value: T | undefined, 
+  f: (value: T) => R
+): R | undefined => 
+    value === undefined ? undefined : f(value)

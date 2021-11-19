@@ -6,8 +6,8 @@ import { useNavigation } from "../hooks/navigation"
 import { Row } from "../primitives/Flexbox"
 import { Picture } from "../primitives/Picture"
 import { Text } from "../primitives/Text"
+import { nop } from "../utils/functional"
 import { DrawerButton } from "./DrawerButton"
-
 
 export const Navbar = () => {
   const ubademyUser = useUbademyUser()
@@ -22,7 +22,7 @@ export const Navbar = () => {
     >
       <Row
         alignChildren="center"
-        onClick={navigation.goTo.home}
+        onClick={ubademyUser?.type === "admin" ? navigation.goTo.home : nop}
         style={{cursor: "pointer"}} 
       >
         <Picture
@@ -41,20 +41,21 @@ export const Navbar = () => {
             <Button 
               children={<Text text={"Administrar usuarios"} fontSize={16}/>}
               style={{color:"white"}}
+              onClick={navigation.goTo.users}
             />
             <Button 
               children={<Text text="Agregar administrador" fontSize={16}/>}
               style={{color:"white"}}
               onClick={navigation.goTo.addAdmin}
             />
-            <Button 
+            {/* <Button 
               children={<Text text="Administrar cursos" fontSize={16}/>}
               style={{color:"white"}}
             />
             <Button 
               children={<Text text="Ver estadisticas" fontSize={16}/>}
               style={{color:"white"}}
-            />
+            /> */}
             <DrawerButton/>
           </> : 
           null

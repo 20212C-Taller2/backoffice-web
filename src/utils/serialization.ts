@@ -1,19 +1,9 @@
+import { Codec, codecCompose } from "./codec"
 import { throwError } from "./error"
 import { id } from "./functional"
-import { Json, Model, Obtain, ProductOf } from "./model"
+import { Json, ListOf, Model, Obtain, ProductOf } from "./model"
 
-export type Codec<T, E> = {
-  encode: (value: T) => E
-  decode: (encoded: E) => T
-}
 
-export const codecCompose = <A, B, C>(
-  lhs: Codec<A, B>,
-  rhs: Codec<B, C>
-): Codec<A, C> => ({
-    encode: value => rhs.encode(lhs.encode(value)),
-    decode: encoded => lhs.decode(rhs.decode(encoded))
-  })
 
 export const VoidT: Model<void> = {
   codec: {
@@ -43,25 +33,11 @@ export const StringT: Model<string> = {
   check: (value): value is string => typeof value === "string"
 }
 
+
 export const jsonToStringCodec: Codec<Json, string> = {
   encode: value => JSON.stringify(value),
   decode: encoded => JSON.parse(encoded)
 }
-
-const UserT = ProductOf({
-  id: StringT,
-  firstName: StringT,
-  lastName: StringT,
-  email: StringT
-})
-
-export const CredentialsT = ProductOf({
-  auth: BooleanT,
-  token: StringT,
-  user: UserT
-})
-
-export type Credentials = Obtain<typeof CredentialsT>
 
 export const stringCodecOf = <T>(model: Model<T>): Codec<T, string> => 
   codecCompose(model.codec, jsonToStringCodec)
@@ -78,3 +54,36 @@ export const optionalCodec = <T>(
     encode: value => value === undefined || value === null ? null : codec.encode(value),
     decode: encoded => encoded === null || encoded === undefined ? undefined : codec.decode(encoded)
   })
+
+const AdminDataT = ProductOf({
+  id: StringT,
+  firstName: StringT,
+  lastName: StringT,
+  email: StringT
+})
+
+export const UserDataT = ProductOf({
+  id: StringT,
+  firstName: StringT,
+  lastName: StringT,
+  email: StringT,
+  placeId: StringT,
+  interests: ListOf(StringT)
+})
+
+export const UserListT = ProductOf({
+  users: ListOf(UserDataT)
+})
+
+export const CredentialsT = ProductOf({
+  auth: BooleanT,
+  token: StringT,
+  user: AdminDataT
+})
+
+export type UserData = Obtain<typeof UserDataT>
+
+export type UserDataList = Obtain<typeof UserListT>
+
+export type Credentials = Obtain<typeof CredentialsT>
+
