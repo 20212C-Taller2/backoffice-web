@@ -14,12 +14,12 @@ export type HttpClient = {
 
   get: <T>(url: string, resultType: Model<T>) => Async<T>
   post: <T>(url: string, body: FormData | unknown, resultType: Model<T>) => Async<T>
-
+  delete: <T>(url: string, resultType: Model<T>) => Async<T>
 }
 
 export const httpRequest = <T>(
   args: {
-    method: "GET" | "POST",
+    method: "GET" | "POST" | "DELETE",
     url: string,
     contentType?: string,
     authToken?: string,
@@ -63,5 +63,13 @@ export const httpUser = (authToken?: string): HttpClient => ({
       contentType: body instanceof FormData ? undefined : CONTENT_TYPES.application.json,
       body: body instanceof FormData ? body : JSON.stringify(body),
       resultType: resultType,
-    })
+    }),
+
+  delete: (url, resultType) =>
+    httpRequest({
+      method: "DELETE",
+      url: url,
+      authToken: authToken,
+      resultType: resultType,
+    }),
 })

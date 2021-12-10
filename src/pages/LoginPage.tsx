@@ -7,13 +7,14 @@ import { Col } from "../primitives/Flexbox"
 import { Picture } from "../primitives/Picture"
 import { StringEditor } from "../primitives/StringEditor"
 import { Text } from "../primitives/Text"
-import { nop } from "../utils/functional"
+import { nop, sequenceIO } from "../utils/functional"
 import { applyLens, lens, useStatefull } from "../utils/state"
 import { Frame } from "../primitives/Frame"
 import { useVisitorUser } from "../hooks/context"
 import { useAsynchronous } from "../utils/asynchronism"
 import { Loading } from "../primitives/Loading"
 import { Alert } from "@material-ui/lab"
+import { useNavigation } from "../hooks/navigation"
 
 
 export const Login = () => {
@@ -26,10 +27,11 @@ export const Login = () => {
   )
 
   const showPassword = useStatefull<boolean>(() => false)
-
+  const navigation = useNavigation()
   const visitorUser = useVisitorUser()
   const login = useAsynchronous(visitorUser.actions.login)
-  const runLogin = login.run({username: credentials.value.username, password: credentials.value.password})
+  const loginIO = login.run({username: credentials.value.username, password: credentials.value.password})
+  const runLogin = sequenceIO([loginIO, navigation.goTo.home])
 
   return (
     <Frame

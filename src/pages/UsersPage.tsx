@@ -12,17 +12,19 @@ import { UserData } from "../utils/serialization"
 import { ImageDefault } from "../components/ImageDefault"
 import AccountCircle from "@material-ui/icons/AccountCircle"
 import Block from "@material-ui/icons/Block"
+import { Navigation, useNavigation } from "../hooks/navigation"
+import { BlockUnblockButtons } from "./UserDetailPage"
 
 
 export const UsersPage = () => {
 
   const adminUser = useAdminUser()
-  
+  const navigation = useNavigation()
   const getUsersAync = useAsynchronous(adminUser.actions.getUsers)
+
   const runGetUsersAsync = getUsersAync.run({credentials: adminUser.credentials})
   useEffect(runGetUsersAsync, [adminUser.credentials])
-  console.log("getUsersAync.result?.users")
-  console.log(getUsersAync.result?.[1])
+  
   return (
     <Col
       fill
@@ -37,7 +39,7 @@ export const UsersPage = () => {
               keyExtractor={value => value.id}
               loadingView={<LoadingPage />}
               emptyView={<ImageDefault width={400} height={400} text={"No hay usuarios"} />}
-              columnList={columns}
+              columnList={columns(navigation)}
             />
           </Paper> : 
           <LoadingPage/> 
@@ -47,7 +49,9 @@ export const UsersPage = () => {
   )
 }
 
-const columns: List<Column<UserData>> = [
+const columns = (
+  navigation: Navigation
+): List<Column<UserData>> => [
   {
     header: <HeaderCell text={"Id"} textCenter />,
     render: it =>
@@ -101,23 +105,12 @@ const columns: List<Column<UserData>> = [
           padding: 3,
           width: 200,
         }}
+        onClick={navigation.goTo.detail.user(it.id)}
       > 
-        <Text text={"Ver perfil"} margin={{right:5}}/>
+        <Text text={"Ver perfil"} margin={{right:5}} />
         <AccountCircle />
       </Button>
-      <Button
-        style={{
-          color: "#444444",
-          border: "1.5px solid #C85C5C",
-          borderRadius: 8,
-          backgroundColor: "#F89C9C",
-          padding: 3,
-          width: 150,
-        }}
-      >
-        <Text text={"Bloquear"} margin={{right:5}}/>
-        <Block/>
-      </Button>
+      <BlockUnblockButtons userId={it.id} width={170}/>
     </Row>,
     grow: 1.5,
     width: 0,

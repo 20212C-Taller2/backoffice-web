@@ -7,7 +7,8 @@ export const paths = {
   home: "/home",
   login: "/login",
   addAdmin: "/addAdmin",
-  users: "/users"
+  users: "/users",
+  userDetail: "/userDetail"
 }
 
 export const useNavigation = () => {
@@ -26,7 +27,10 @@ export const useNavigation = () => {
         home: push(paths.home),
         login: push(paths.login),
         addAdmin: push(paths.addAdmin),
-        users: push(paths.users)
+        users: push(paths.users),
+        detail: {
+          user: (id: string) => push(`${paths.userDetail}/${id}`)
+        }
       },
       back: back
     }

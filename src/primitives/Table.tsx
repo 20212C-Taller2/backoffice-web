@@ -79,8 +79,7 @@ export const Table = <T,>(
     emptyView?: React.ReactNode,
     loadingView?: React.ReactNode
   }) => {
-    console.log("props.provider")
-console.log(props.provider)
+
   const columnList = props.columnList ?? []
   const provider = props.provider ?? emptyAsyncCollection
 

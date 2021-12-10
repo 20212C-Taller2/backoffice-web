@@ -7,6 +7,7 @@ import { AddAdministratorPage } from "./pages/AddAdministratorPage"
 import { UdemyUser } from "./user/user"
 import { Home } from "./pages/Home"
 import { UsersPage } from "./pages/UsersPage"
+import { UserDetailPage } from "./pages/UserDetailPage"
 
 
 export const UbademyRouter = (
@@ -55,6 +56,9 @@ const AdminRoutes = () => {
       </Route>
       <Route path={paths.users}>
         <UsersPage />
+      </Route>
+      <Route path={paths.userDetail}>
+        <UserDetailPage />
       </Route>
     </>
   ) 
