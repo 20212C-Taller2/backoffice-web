@@ -37,7 +37,7 @@ export const UbademyRouter = (
 const VisitorRoutes = () => {
 
   return(
-    <Route exact path={["/", paths.login]}>
+    <Route exact path={["/"]}>
       <Login />
     </Route>
   ) 
@@ -48,7 +48,7 @@ const AdminRoutes = () => {
 
   return(
     <>
-      <Route path={paths.home}>
+      <Route exact path={["/", paths.home]}>
         <Home />
       </Route>
       <Route path={paths.addAdmin}>

@@ -64,7 +64,7 @@ export const ProfileDrawer = (
         </Row>
         <Button
           style={{marginBottom: 40, backgroundColor: "#484C44", borderRadius: 5, padding: 10}}
-          onClick={sequenceIO([navigation.goTo.login, adminUser.actions.logout])}
+          onClick={sequenceIO([navigation.goTo.root, adminUser.actions.logout])}
         >
           <ExitToAppIcon
             style={{color:"white"}}

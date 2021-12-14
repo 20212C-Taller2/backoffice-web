@@ -110,7 +110,11 @@ const columns = (
         <Text text={"Ver perfil"} margin={{right:5}} />
         <AccountCircle />
       </Button>
-      <BlockUnblockButtons userId={it.id} width={170}/>
+      <BlockUnblockButtons 
+        userId={it.id} 
+        blocked={it.blocked}
+        width={170}
+      />
     </Row>,
     grow: 1.5,
     width: 0,

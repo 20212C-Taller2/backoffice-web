@@ -68,7 +68,8 @@ export const UserDataT = ProductOf({
   lastName: StringT,
   email: StringT,
   placeId: StringT,
-  interests: ListOf(StringT)
+  interests: ListOf(StringT),
+  blocked: BooleanT
 })
 
 export const UserListT = ProductOf({

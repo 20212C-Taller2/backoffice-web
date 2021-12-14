@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Button from "@material-ui/core/Button"
 import Lock from "@material-ui/icons/Lock"
 import Person from "@material-ui/icons/Person"
@@ -30,8 +30,7 @@ export const Login = () => {
   const navigation = useNavigation()
   const visitorUser = useVisitorUser()
   const login = useAsynchronous(visitorUser.actions.login)
-  const loginIO = login.run({username: credentials.value.username, password: credentials.value.password})
-  const runLogin = sequenceIO([loginIO, navigation.goTo.home])
+  const runLogin = login.run({username: credentials.value.username, password: credentials.value.password})
 
   return (
     <Frame

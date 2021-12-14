@@ -4,8 +4,8 @@ import { IO } from "../utils/functional"
 
 /* Add the necessary ptahs */
 export const paths = {
+  root: "/",
   home: "/home",
-  login: "/login",
   addAdmin: "/addAdmin",
   users: "/users",
   userDetail: "/userDetail"
@@ -24,8 +24,8 @@ export const useNavigation = () => {
 
     return {
       goTo: {
+        root: push(paths.root),
         home: push(paths.home),
-        login: push(paths.login),
         addAdmin: push(paths.addAdmin),
         users: push(paths.users),
         detail: {
