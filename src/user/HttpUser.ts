@@ -12,7 +12,7 @@ export const CONTENT_TYPES = {
 
 export type HttpClient = {
 
-  get: <T>(url: string, resultType: Model<T>) => Async<T>
+  get: <T>(url: string, resultType: Model<T>, gateway?: boolean) => Async<T>
   post: <T>(url: string, body: FormData | unknown, resultType: Model<T>) => Async<T>
   delete: <T>(url: string, resultType: Model<T>) => Async<T>
 }
@@ -25,19 +25,24 @@ export const httpRequest = <T>(
     authToken?: string,
     body?: FormData | string,
     resultType: Model<T>
+    gateway?: boolean
   }
 ): Async<T> => 
     async () => { 
 
-      const response = await fetch("https://ubademy-users-api.herokuapp.com" + args.url, { 
-        method: args.method, 
-        mode: "cors",
-        headers: filterNotNone([
-          args.contentType !== undefined ? ["Content-Type", args.contentType] : undefined,
-          args.authToken !== undefined ? ["Authorization", `Bearer ${args.authToken}`] : undefined, 
-        ]) as string[][],
-        body: args.body
-      })
+      const response = await fetch(
+        `${args.gateway === true ? 
+          "https://ubademy-courses-api.herokuapp.com" : "https://ubademy-users-api.herokuapp.com"}${args.url}`, 
+        { 
+          method: args.method,
+          mode: "cors", 
+          headers: filterNotNone([
+            args.contentType !== undefined ? ["Content-Type", args.contentType] : undefined,
+            args.authToken !== undefined ? ["Authorization", `Bearer ${args.authToken}`] : undefined, 
+          ]) as string[][],
+          body: args.body
+        }
+      )
       checkStatus(response.status)
 
       return args.resultType as never as Model<void> === VoidT ? 
@@ -47,12 +52,13 @@ export const httpRequest = <T>(
 
 export const httpUser = (authToken?: string): HttpClient => ({
 
-  get: (url, resultType) => 
+  get: (url, resultType, gateway) => 
     httpRequest({
       method: "GET",
       url: url,
       authToken: authToken,
-      resultType: resultType
+      resultType: resultType,
+      gateway: gateway
     }),
 
   post: (url, body, resultType) =>

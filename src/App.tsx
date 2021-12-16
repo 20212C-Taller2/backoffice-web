@@ -6,8 +6,10 @@ import { VisitorUser } from "./user/VisitorUser"
 import { UbademyRouter } from "./UbademyRouter"
 import { State, usePersistentState } from "./utils/state"
 import { UserContext } from "./hooks/context"
-import { Credentials, CredentialsT, OptionalOf, stringCodecOf } from "./utils/serialization"
+import { Credentials, CredentialsT } from "./utils/serialization"
 import { useQueryClient } from "react-query"
+import { stringCodecOf } from "./utils/codec"
+import { OptionalOf } from "./utils/model"
 
 const useUser = (credentials: State<Credentials | undefined>): AdminUser | VisitorUser => {
 

@@ -1,4 +1,4 @@
-import { Codec, listCodec } from "./codec"
+import { Codec, listCodec, optionalCodec, withDefaultCodec } from "./codec"
 import { List } from "./list"
 
 export type Json = unknown
@@ -42,6 +42,21 @@ export const codecProduct = <A extends Record<keyof never, unknown>>(
     )
   }
 }
+
+export const withDefault = <T>(
+  model: Model<T>,
+  defaultValue: T
+): Model<T> => ({
+    codec: withDefaultCodec(model.codec, defaultValue),
+    check: model.check
+  })
+
+export const OptionalOf = <T>(
+  model: Model<T>
+): Model<T | undefined> => ({
+    codec: optionalCodec(model.codec),
+    check: (value): value is T | undefined => value === undefined || model.check(value) 
+  })
 
 export const ListOf = <T>(
   model: Model<T>

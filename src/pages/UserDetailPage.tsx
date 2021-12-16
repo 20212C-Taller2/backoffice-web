@@ -27,9 +27,9 @@ export const UserDetailPage = () => {
   const splitedPathname = pathname.split("/")
   const id = splitedPathname[(splitedPathname.length)-1]
 
-  const getUserAync = useAsynchronous(adminUser.actions.getUser)
+  const getUserAsync = useAsynchronous(adminUser.actions.getUser)
 
-  const runGetUserAsync = getUserAync.run({credentials: adminUser.credentials, userId: id})
+  const runGetUserAsync = getUserAsync.run({credentials: adminUser.credentials, userId: id})
   useEffect(runGetUserAsync, [id])
 
   return (
@@ -38,14 +38,14 @@ export const UserDetailPage = () => {
       padding={40}
     >
       {
-        getUserAync.result !== undefined && getUserAync.status === "completed"?
+        getUserAsync.result !== undefined && getUserAsync.status === "completed"?
         <>
           <Row
             style={{borderBottom: "2px solid lightgray", marginBottom: 40, minHeight: "max-content"}}
             justifyChildren="start"
           >
             <Text 
-              text={`Usuario: ${getUserAync.result.lastName} ${getUserAync.result.firstName}`} 
+              text={`Usuario: ${getUserAsync.result.lastName} ${getUserAsync.result.firstName}`} 
               bold 
               fontSize={40}
               fill
@@ -61,8 +61,8 @@ export const UserDetailPage = () => {
                 margin={{ right: 20}}
               />
               <Chip
-                color={getUserAync.result.blocked ? "secondary" : "primary"}
-                label={getUserAync.result.blocked ? "BLOQUEADA" : "DESBLOQUEADA"}
+                color={getUserAsync.result.blocked ? "secondary" : "primary"}
+                label={getUserAsync.result.blocked ? "BLOQUEADA" : "DESBLOQUEADA"}
               />
             </Row>
           </Row>
@@ -76,9 +76,9 @@ export const UserDetailPage = () => {
             >
                 <Text text={"Datos personales "} bold fontSize={30}/>
                 <Separator style={{marginBottom: 20}}/>
-                <Text text={`• Id de usuario: ${getUserAync.result.id}`} fontSize={20}/>
-                <Text text={`• Apellido y nombre: ${getUserAync.result.lastName} ${getUserAync.result.firstName}`} fontSize={20}/>
-                <Text text={`• Email: ${getUserAync.result.email}`} fontSize={20}/>
+                <Text text={`• Id de usuario: ${getUserAsync.result.id}`} fontSize={20}/>
+                <Text text={`• Apellido y nombre: ${getUserAsync.result.lastName} ${getUserAsync.result.firstName}`} fontSize={20}/>
+                <Text text={`• Email: ${getUserAsync.result.email}`} fontSize={20}/>
             </Col>
           </Paper>
           <Paper 
@@ -92,8 +92,8 @@ export const UserDetailPage = () => {
                 <Separator style={{marginBottom: 20}}/>
 
                 {
-                  getUserAync.result.interests.length !== 0 ?
-                    getUserAync.result.interests.map((field, index) =>
+                  getUserAsync.result.interests.length !== 0 ?
+                    getUserAsync.result.interests.map((field, index) =>
                       <Row
                         justifyChildren="start"
                         key={index}
@@ -122,8 +122,8 @@ export const UserDetailPage = () => {
             </Col>
           </Paper>
           <BlockUnblockButtons 
-            userId={getUserAync.result.id}
-            blocked={getUserAync.result.blocked}
+            userId={getUserAsync.result.id}
+            blocked={getUserAsync.result.blocked}
           />
         </> : 
         <LoadingPage/> 
@@ -204,7 +204,7 @@ export const BlockUnblockButtons = (
           />
           {
             blockUnblockUserAsync.status === "failed" ? 
-              <Alert style={{marginTop: 15}} severity="error">Correo electrónico o contraseña incorrecta</Alert> : 
+              <Alert style={{marginTop: 15}} severity="error">Algo ha fallado, por favor vuelve a intentarlo</Alert> : 
               blockUnblockUserAsync.status === "completed" ?
                 <Row>
                   <Success style={{marginRight: 10, background: "green", color: "white", borderRadius: "50%", padding: 2}}/>

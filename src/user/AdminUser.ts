@@ -1,7 +1,7 @@
 import { Async } from "../utils/asynchronism"
 import { IO } from "../utils/functional"
 import { List } from "../utils/list"
-import { Credentials, UserData, UserDataList, UserDataT, UserListT, VoidT } from "../utils/serialization"
+import { CourseListT, Credentials, User, UserT, UserListT, VoidT, CourseList, Course, CourseT, ExamList, ExamListT, Exam } from "../utils/serialization"
 import { State } from "../utils/state"
 import { httpUser } from "./HttpUser"
 
@@ -13,6 +13,11 @@ export type AdminUser = {
   credentials: Credentials
 }
 
+type CourseDetail = {
+  course: Course,
+  creator: User,
+  collaborators: List<User>
+}
 
 export type AdminActions = {
 
@@ -20,9 +25,15 @@ export type AdminActions = {
 
   registerAdmin: (args: { firstName: string, lastName: string, email: string, password: string }) => Async<void>
 
-  getUsers: (args: { credentials: Credentials}) => Async<List<UserData>>
+  getUsers: (args: { credentials: Credentials}) => Async<List<User>>
 
-  getUser: (args: { credentials: Credentials, userId: string}) => Async<UserData>
+  getUser: (args: { credentials: Credentials, userId: string}) => Async<User>
+
+  getCourses: (args: { credentials: Credentials}) => Async<CourseList>
+
+  getCourse: (args: { credentials: Credentials, courseId: string}) => Async<CourseDetail>
+
+  getExams: (args: { credentials: Credentials, courseId: string}) => Async<ExamList>
 
   blockUnblockUser: (args: { credentials: Credentials, userId: string, block: boolean}) => Async<void>
 
@@ -46,6 +57,12 @@ export const buildAdminUser = (
       getUsers: getUsers,
 
       getUser: getUser,
+
+      getCourses: getCourses,
+
+      getCourse: getCourse,
+
+      getExams: getExams,
 
       blockUnblockUser: blockUnblockUser
     },
@@ -83,7 +100,7 @@ export const getUsers = (
   args:{
     credentials: Credentials
   }
-): Async<List<UserData>> => async() => {
+): Async<List<User>> => async() => {
 
   const token = args.credentials.token
   const httpAdminUser = httpUser(token)
@@ -101,14 +118,14 @@ export const getUser = (
     credentials: Credentials,
     userId: string
   }
-): Async<UserData> => async() => {
+): Async<User> => async() => {
 
   const token = args.credentials.token
   const httpAdminUser = httpUser(token)
 
   const user = await httpAdminUser.get(
     `/users/${args.userId}`, 
-    UserDataT
+    UserT
   )()
 
   return user
@@ -124,7 +141,6 @@ export const blockUnblockUser = (
 
   const token = args.credentials.token
   const httpAdminUser = httpUser(token)
-  console.log("ss")
   const adminOperation = args.block ? 
     httpAdminUser.post(
       `/users/${args.userId}/block`, 
@@ -135,6 +151,81 @@ export const blockUnblockUser = (
       `/users/${args.userId}/block`, 
       VoidT
     )
-  console.log(args.block)
   await adminOperation()
+}
+
+export const getCourse = (
+  args:{
+    credentials: Credentials
+    courseId: string
+  }
+): Async<CourseDetail> => async() => {
+
+  const token = args.credentials.token
+  const httpAdminUser = httpUser(token)
+
+  const fetchCourse = await httpAdminUser.get(
+    `/courses/${args.courseId}`, 
+    CourseT,
+    true
+  )()
+
+  const fetchCreator = await httpAdminUser.get(
+    `/users/${fetchCourse.creator}`, 
+    UserT
+  )()
+  
+  
+  const fetchCollaborators = await Promise.all(
+    fetchCourse.collaborators.map(it =>
+      httpAdminUser.get(
+        `/users/${it}`, 
+        UserT
+      )
+  ).map(it => it()))
+
+  const detailCourse: CourseDetail = {
+    course: fetchCourse,
+    creator: fetchCreator,
+    collaborators: fetchCollaborators,
+  }
+  
+  return detailCourse
+}
+
+export const getCourses = (
+  args:{
+    credentials: Credentials
+  }
+): Async<List<Course>> => async() => {
+
+  const token = args.credentials.token
+  const httpAdminUser = httpUser(token)
+
+  const coursesList = await httpAdminUser.get(
+    "/courses", 
+    CourseListT,
+    true
+  )()
+
+  return coursesList
+}
+
+export const getExams = (
+  args:{
+    credentials: Credentials
+    courseId: string
+  }
+): Async<ExamList> => async() => {
+
+  const token = args.credentials.token
+  const httpAdminUser = httpUser(token)
+
+  const examsList = await httpAdminUser.get(
+    `/courses/${args.courseId}/exams`, 
+    ExamListT,
+    true
+  )()
+
+  return examsList
 }

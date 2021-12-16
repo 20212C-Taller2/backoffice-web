@@ -8,6 +8,8 @@ import { UdemyUser } from "./user/user"
 import { Home } from "./pages/Home"
 import { UsersPage } from "./pages/UsersPage"
 import { UserDetailPage } from "./pages/UserDetailPage"
+import { CoursesPage } from "./pages/CoursesPage"
+import { CourseDetailPage } from "./pages/CourseDetailPage"
 
 
 export const UbademyRouter = (
@@ -54,11 +56,17 @@ const AdminRoutes = () => {
       <Route path={paths.addAdmin}>
         <AddAdministratorPage />
       </Route>
+      <Route path={paths.courses}>
+        <CoursesPage />
+      </Route>
       <Route path={paths.users}>
         <UsersPage />
       </Route>
       <Route path={paths.userDetail}>
         <UserDetailPage />
+      </Route>
+      <Route path={paths.courseDetail}>
+        <CourseDetailPage />
       </Route>
     </>
   ) 

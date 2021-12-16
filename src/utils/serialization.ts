@@ -1,7 +1,7 @@
-import { Codec, codecCompose } from "./codec"
+import { Codec, codecCompose, withDefaultCodec } from "./codec"
 import { throwError } from "./error"
 import { id } from "./functional"
-import { Json, ListOf, Model, Obtain, ProductOf } from "./model"
+import { Json, ListOf, Model, Obtain, OptionalOf, ProductOf, withDefault } from "./model"
 
 
 
@@ -16,6 +16,11 @@ export const VoidT: Model<void> = {
 export const stringCodec: Codec<string, Json> = {
   encode: id,
   decode: value => StringT.check(value) ? value : throwError({name: `${value}`, message: `${value} is not a string`} )
+}
+
+export const numberCodec: Codec<number, Json> = {
+  encode: id,
+  decode: value => NumberT.check(value) ? value : throwError({name: `${value}`, message: `${value} is not a number`} )
 }
 
 export const booleanCodec: Codec<boolean, Json> = {
@@ -33,27 +38,16 @@ export const StringT: Model<string> = {
   check: (value): value is string => typeof value === "string"
 }
 
+export const NumberT: Model<number> = {
+  codec: numberCodec,
+  check: (value): value is number => typeof value === "number"
+}
+
 
 export const jsonToStringCodec: Codec<Json, string> = {
   encode: value => JSON.stringify(value),
   decode: encoded => JSON.parse(encoded)
 }
-
-export const stringCodecOf = <T>(model: Model<T>): Codec<T, string> => 
-  codecCompose(model.codec, jsonToStringCodec)
-
-export const OptionalOf = <T>(
-  model: Model<T>
-): Model<T | undefined> => ({
-    codec: optionalCodec(model.codec),
-    check: (value): value is T | undefined => value === undefined || model.check(value) })
-
-export const optionalCodec = <T>(
-  codec: Codec<T, Json>
-): Codec<T | undefined, Json> => ({
-    encode: value => value === undefined || value === null ? null : codec.encode(value),
-    decode: encoded => encoded === null || encoded === undefined ? undefined : codec.decode(encoded)
-  })
 
 const AdminDataT = ProductOf({
   id: StringT,
@@ -62,7 +56,7 @@ const AdminDataT = ProductOf({
   email: StringT
 })
 
-export const UserDataT = ProductOf({
+export const UserT = ProductOf({
   id: StringT,
   firstName: StringT,
   lastName: StringT,
@@ -73,8 +67,40 @@ export const UserDataT = ProductOf({
 })
 
 export const UserListT = ProductOf({
-  users: ListOf(UserDataT)
+  users: ListOf(UserT)
 })
+
+export const ExamT = ProductOf({
+  title: StringT,
+  published: BooleanT,
+  questions: ListOf(
+    ProductOf({
+      number: NumberT,
+      text: StringT,
+      id: NumberT
+    })
+  ),
+  id: NumberT
+})
+
+export const ExamListT = ListOf(ExamT)
+
+export const CourseT = ProductOf({
+  title: StringT,
+  description: StringT,
+  type: StringT,
+  creator: StringT,
+  location: OptionalOf(StringT),
+  tags: ListOf(StringT),
+  media: ListOf(StringT),
+  subscription: StringT,
+  id: NumberT,
+  students: ListOf(StringT),
+  collaborators: ListOf(StringT),
+  exams: ExamListT
+})
+
+export const CourseListT = ListOf(CourseT)
 
 export const CredentialsT = ProductOf({
   auth: BooleanT,
@@ -82,9 +108,17 @@ export const CredentialsT = ProductOf({
   user: AdminDataT
 })
 
-export type UserData = Obtain<typeof UserDataT>
+export type User = Obtain<typeof UserT>
 
-export type UserDataList = Obtain<typeof UserListT>
+export type UserList = Obtain<typeof UserListT>
+
+export type Exam = Obtain<typeof ExamT>
+
+export type ExamList = Obtain<typeof ExamListT>
+
+export type Course = Obtain<typeof CourseT>
+
+export type CourseList = Obtain<typeof CourseListT>
 
 export type Credentials = Obtain<typeof CredentialsT>
 

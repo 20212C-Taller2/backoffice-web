@@ -8,7 +8,7 @@ import { Column, ContentCell, HeaderCell, listDataProvider, Table } from "../pri
 import { Text } from "../primitives/Text"
 import { useAsynchronous } from "../utils/asynchronism"
 import { List } from "../utils/list"
-import { UserData } from "../utils/serialization"
+import { User } from "../utils/serialization"
 import { ImageDefault } from "../components/ImageDefault"
 import AccountCircle from "@material-ui/icons/AccountCircle"
 import Block from "@material-ui/icons/Block"
@@ -33,7 +33,7 @@ export const UsersPage = () => {
       {
         getUsersAync.result !== undefined && getUsersAync.status === "completed"?
           <Paper style={{ marginTop: 10, height:"auto"}} elevation={1}>
-            <Table<UserData>
+            <Table<User>
               provider={listDataProvider(getUsersAync.result)}
               pageSize={10}
               keyExtractor={value => value.id}
@@ -51,7 +51,7 @@ export const UsersPage = () => {
 
 const columns = (
   navigation: Navigation
-): List<Column<UserData>> => [
+): List<Column<User>> => [
   {
     header: <HeaderCell text={"Id"} textCenter />,
     render: it =>

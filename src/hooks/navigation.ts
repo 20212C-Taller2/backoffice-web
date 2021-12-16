@@ -7,8 +7,10 @@ export const paths = {
   root: "/",
   home: "/home",
   addAdmin: "/addAdmin",
+  courses: "/courses",
   users: "/users",
-  userDetail: "/userDetail"
+  userDetail: "/userDetail",
+  courseDetail: "/courseDetail"
 }
 
 export const useNavigation = () => {
@@ -27,9 +29,11 @@ export const useNavigation = () => {
         root: push(paths.root),
         home: push(paths.home),
         addAdmin: push(paths.addAdmin),
+        courses: push(paths.courses),
         users: push(paths.users),
         detail: {
-          user: (id: string) => push(`${paths.userDetail}/${id}`)
+          user: (id: string) => push(`${paths.userDetail}/${id}`),
+          course: (id: string) => push(`${paths.courseDetail}/${id}`),
         }
       },
       back: back

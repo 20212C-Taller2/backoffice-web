@@ -44,18 +44,19 @@ export const Navbar = () => {
               onClick={navigation.goTo.users}
             />
             <Button 
+              children={<Text text="Administrar cursos" fontSize={16}/>}
+              style={{color:"white"}}
+              onClick={navigation.goTo.courses}
+            />
+            <Button 
               children={<Text text="Agregar administrador" fontSize={16}/>}
               style={{color:"white"}}
               onClick={navigation.goTo.addAdmin}
             />
-            {/* <Button 
-              children={<Text text="Administrar cursos" fontSize={16}/>}
-              style={{color:"white"}}
-            />
             <Button 
               children={<Text text="Ver estadisticas" fontSize={16}/>}
               style={{color:"white"}}
-            /> */}
+            /> 
             <DrawerButton/>
           </> : 
           null
