@@ -1,6 +1,7 @@
 import { throwError } from "./error"
 import { List } from "./list"
 import { Json, Model } from "./model"
+import { letIn } from "./pattern-matching"
 import { jsonToStringCodec } from "./serialization"
 
 export type Codec<T, E> = {
@@ -42,4 +43,23 @@ export const optionalCodec = <T>(
 ): Codec<T | undefined, Json> => ({
     encode: value => value === undefined || value === null ? null : codec.encode(value),
     decode: encoded => encoded === null || encoded === undefined ? undefined : codec.decode(encoded)
+  })
+
+export const enumCodec = <A, B extends A, E>(
+  codec: Codec<A, E>,
+  values: List<B>
+): Codec<B, E> => refinedCodec(
+  codec, 
+  value => values.findIndex(it => it === value) >= 0
+) as unknown as Codec<B, E>
+
+export const refinedCodec = <T, E>(
+  codec: Codec<T, E>,
+  predicate: (value: T) => boolean
+): Codec<T, E> => ({
+    encode: value => predicate(value) ? codec.encode(value) : 
+      throwError({name:"Refined codec error", message: `invalid refined value ${value}`}),
+    decode: encoded => letIn(codec.decode(encoded), decoded =>
+      predicate(decoded) ? decoded : throwError({name:"Refined codec error", message: `invalid decoded value ${decoded}`}),
+    )
   })

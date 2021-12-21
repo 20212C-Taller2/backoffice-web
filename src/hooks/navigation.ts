@@ -10,7 +10,8 @@ export const paths = {
   courses: "/courses",
   users: "/users",
   userDetail: "/userDetail",
-  courseDetail: "/courseDetail"
+  courseDetail: "/courseDetail",
+  metricsPage: "/metricsPage"
 }
 
 export const useNavigation = () => {
@@ -31,6 +32,7 @@ export const useNavigation = () => {
         addAdmin: push(paths.addAdmin),
         courses: push(paths.courses),
         users: push(paths.users),
+        metrics: push(paths.metricsPage),
         detail: {
           user: (id: string) => push(`${paths.userDetail}/${id}`),
           course: (id: string) => push(`${paths.courseDetail}/${id}`),

@@ -1,7 +1,7 @@
 import { Codec, codecCompose, withDefaultCodec } from "./codec"
 import { throwError } from "./error"
 import { id } from "./functional"
-import { Json, ListOf, Model, Obtain, OptionalOf, ProductOf, withDefault } from "./model"
+import { Json, ListOf, Model, Obtain, OptionalOf, ProductOf, StringEnumOf, withDefault } from "./model"
 
 
 
@@ -102,6 +102,24 @@ export const CourseT = ProductOf({
 
 export const CourseListT = ListOf(CourseT)
 
+export const MetricTypeT = StringEnumOf([
+  "user-login", 
+  "user-federated-login", 
+  "user-unblocked", 
+  "user-blocked", 
+  "user-register",
+  "user-federated-register" 
+])
+
+export const MetricT = ProductOf({
+  operation: MetricTypeT,
+  count: NumberT
+})
+
+export const MetricListT =  ProductOf({
+  metrics: ListOf(MetricT)
+})
+
 export const CredentialsT = ProductOf({
   auth: BooleanT,
   token: StringT,
@@ -119,6 +137,12 @@ export type ExamList = Obtain<typeof ExamListT>
 export type Course = Obtain<typeof CourseT>
 
 export type CourseList = Obtain<typeof CourseListT>
+
+export type Metric = Obtain<typeof MetricT>
+
+export type MetricType = Obtain<typeof MetricTypeT>
+
+export type MetricList = Obtain<typeof MetricListT>
 
 export type Credentials = Obtain<typeof CredentialsT>
 

@@ -12,7 +12,7 @@ export const CONTENT_TYPES = {
 
 export type HttpClient = {
 
-  get: <T>(url: string, resultType: Model<T>, gateway?: boolean) => Async<T>
+  get: <T>(url: string, resultType: Model<T>) => Async<T>
   post: <T>(url: string, body: FormData | unknown, resultType: Model<T>) => Async<T>
   delete: <T>(url: string, resultType: Model<T>) => Async<T>
 }
@@ -25,14 +25,12 @@ export const httpRequest = <T>(
     authToken?: string,
     body?: FormData | string,
     resultType: Model<T>
-    gateway?: boolean
   }
 ): Async<T> => 
     async () => { 
 
       const response = await fetch(
-        `${args.gateway === true ? 
-          "https://ubademy-courses-api.herokuapp.com" : "https://ubademy-users-api.herokuapp.com"}${args.url}`, 
+        args.url, 
         { 
           method: args.method,
           mode: "cors", 
@@ -52,13 +50,12 @@ export const httpRequest = <T>(
 
 export const httpUser = (authToken?: string): HttpClient => ({
 
-  get: (url, resultType, gateway) => 
+  get: (url, resultType) => 
     httpRequest({
       method: "GET",
       url: url,
       authToken: authToken,
       resultType: resultType,
-      gateway: gateway
     }),
 
   post: (url, body, resultType) =>

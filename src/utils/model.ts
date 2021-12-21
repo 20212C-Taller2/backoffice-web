@@ -1,11 +1,16 @@
-import { Codec, listCodec, optionalCodec, withDefaultCodec } from "./codec"
+import { Codec, enumCodec, listCodec, optionalCodec, withDefaultCodec } from "./codec"
 import { List } from "./list"
+import { StringT } from "./serialization"
 
 export type Json = unknown
 
 export type Model<T> = {
     codec: Codec<T, Json>,
     check: (value: unknown) => value is T
+}
+
+export type EnumModel<T> = Model<T> & {
+  values: List<T>
 }
 
 export type Obtain<M> = M extends Model<infer T> ? T : never
@@ -64,6 +69,19 @@ export const ListOf = <T>(
     codec: listCodec(model.codec),
     check: (value): value is List<T> => Array.isArray(value) && all(value, model.check)
   })
+
+export const EnumOf = <T, E extends T>(
+  model: Model<T>,
+  values: List<E>
+): EnumModel<E> => ({
+    codec: enumCodec(model.codec, values),
+    check: (value): value is E => values.findIndex(it => it === value) >= 0,
+    values: values
+  }) 
+
+export const StringEnumOf = <E extends string>(
+  values: List<E>
+): EnumModel<E> => EnumOf(StringT, values)
 
 export const ProductOf = <A extends Record<keyof never, unknown>>(
   product: {

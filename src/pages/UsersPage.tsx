@@ -20,21 +20,22 @@ export const UsersPage = () => {
 
   const adminUser = useAdminUser()
   const navigation = useNavigation()
-  const getUsersAync = useAsynchronous(adminUser.actions.getUsers)
-
-  const runGetUsersAsync = getUsersAync.run({credentials: adminUser.credentials})
+  const getUsersAsync = useAsynchronous(adminUser.actions.getUsers)
+  console.log("getUsersAync.result")
+  const runGetUsersAsync = getUsersAsync.run({credentials: adminUser.credentials})
   useEffect(runGetUsersAsync, [adminUser.credentials])
-  
+  console.log("getUsersAync.result")
+  console.log(getUsersAsync)
   return (
     <Col
       fill
       padding={40}
     >
       {
-        getUsersAync.result !== undefined && getUsersAync.status === "completed"?
+        getUsersAsync.result !== undefined && getUsersAsync.status === "completed"?
           <Paper style={{ marginTop: 10, height:"auto"}} elevation={1}>
             <Table<User>
-              provider={listDataProvider(getUsersAync.result)}
+              provider={listDataProvider(getUsersAsync.result)}
               pageSize={10}
               keyExtractor={value => value.id}
               loadingView={<LoadingPage />}

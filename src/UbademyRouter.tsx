@@ -10,6 +10,7 @@ import { UsersPage } from "./pages/UsersPage"
 import { UserDetailPage } from "./pages/UserDetailPage"
 import { CoursesPage } from "./pages/CoursesPage"
 import { CourseDetailPage } from "./pages/CourseDetailPage"
+import { MetricsPage } from "./pages/MetricsPage"
 
 
 export const UbademyRouter = (
@@ -23,13 +24,7 @@ export const UbademyRouter = (
         {
           props.user.type === "visitor"?
             <VisitorRoutes/> :
-            <AdminRoutes/>
-        /*
-            Administracion de usuarios (listar, ver perfil)
-            Administrar cursos
-            Ver estadisticas
-            Perfil ?
-        */      
+            <AdminRoutes/>    
         }
       </MainLayout>
     </Router>
@@ -67,6 +62,9 @@ const AdminRoutes = () => {
       </Route>
       <Route path={paths.courseDetail}>
         <CourseDetailPage />
+      </Route>
+      <Route path={paths.metricsPage}>
+        <MetricsPage />
       </Route>
     </>
   ) 

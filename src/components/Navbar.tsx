@@ -56,6 +56,7 @@ export const Navbar = () => {
             <Button 
               children={<Text text="Ver estadisticas" fontSize={16}/>}
               style={{color:"white"}}
+              onClick={navigation.goTo.metrics}
             /> 
             <DrawerButton/>
           </> : 

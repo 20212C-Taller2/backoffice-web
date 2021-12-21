@@ -35,7 +35,7 @@ export const buildVisitorUser = (
         }
         
         const fetchCredentials  =  await httpVisitorUser.post(
-          "/login/admin", 
+          "https://ubademy-users-api.herokuapp.com/login/admin", 
           bodyLogin,
           CredentialsT
         )()
@@ -52,9 +52,7 @@ export const buildVisitorUser = (
         }
 
         setCredentials(credentials)()
-      },
-  
-      //signUp: () => async() => {}
+      }
     }
   
   }

@@ -1,7 +1,22 @@
 import { Async } from "../utils/asynchronism"
 import { IO } from "../utils/functional"
 import { List } from "../utils/list"
-import { CourseListT, Credentials, User, UserT, UserListT, VoidT, CourseList, Course, CourseT, ExamList, ExamListT, Exam } from "../utils/serialization"
+import { 
+  CourseListT, 
+  Credentials, 
+  User, 
+  UserT, 
+  UserListT, 
+  VoidT, 
+  CourseList, 
+  Course, 
+  CourseT, 
+  ExamList, 
+  ExamListT, 
+  Exam,
+  MetricList,
+  MetricListT
+} from "../utils/serialization"
 import { State } from "../utils/state"
 import { httpUser } from "./HttpUser"
 
@@ -35,6 +50,8 @@ export type AdminActions = {
 
   getExams: (args: { credentials: Credentials, courseId: string}) => Async<ExamList>
 
+  getMetrics: (args: { credentials: Credentials, startDate?: string, endDate?: string}) => Async<MetricList>
+
   blockUnblockUser: (args: { credentials: Credentials, userId: string, block: boolean}) => Async<void>
 
 }
@@ -64,6 +81,8 @@ export const buildAdminUser = (
 
       getExams: getExams,
 
+      getMetrics: getMetrics,
+
       blockUnblockUser: blockUnblockUser
     },
 
@@ -90,7 +109,7 @@ export const registerAdminAsync = (
   }
 
   await httpAdminUser.post(
-    "/register/admin", 
+    "https://ubademy-users-api.herokuapp.com/register/admin", 
     registerAdminBody,
     VoidT
   )()
@@ -106,7 +125,7 @@ export const getUsers = (
   const httpAdminUser = httpUser(token)
 
   const userList = await httpAdminUser.get(
-    "/users", 
+    "https://ubademy-users-api.herokuapp.com/users?skip=0&limit=999999999", 
     UserListT
   )()
 
@@ -124,7 +143,7 @@ export const getUser = (
   const httpAdminUser = httpUser(token)
 
   const user = await httpAdminUser.get(
-    `/users/${args.userId}`, 
+    `https://ubademy-users-api.herokuapp.com/users/${args.userId}`, 
     UserT
   )()
 
@@ -143,12 +162,12 @@ export const blockUnblockUser = (
   const httpAdminUser = httpUser(token)
   const adminOperation = args.block ? 
     httpAdminUser.post(
-      `/users/${args.userId}/block`, 
+      `https://ubademy-users-api.herokuapp.com/users/${args.userId}/block`, 
       undefined,
       VoidT
     ) :
     httpAdminUser.delete(
-      `/users/${args.userId}/block`, 
+      `https://ubademy-users-api.herokuapp.com/users/${args.userId}/block`, 
       VoidT
     )
   await adminOperation()
@@ -165,13 +184,12 @@ export const getCourse = (
   const httpAdminUser = httpUser(token)
 
   const fetchCourse = await httpAdminUser.get(
-    `/courses/${args.courseId}`, 
+    `https://ubademy-courses-api.herokuapp.com/courses/${args.courseId}`, 
     CourseT,
-    true
   )()
 
   const fetchCreator = await httpAdminUser.get(
-    `/users/${fetchCourse.creator}`, 
+    `https://ubademy-users-api.herokuapp.com/users/${fetchCourse.creator}`, 
     UserT
   )()
   
@@ -179,7 +197,7 @@ export const getCourse = (
   const fetchCollaborators = await Promise.all(
     fetchCourse.collaborators.map(it =>
       httpAdminUser.get(
-        `/users/${it}`, 
+        `https://ubademy-users-api.herokuapp.com/users/${it}`, 
         UserT
       )
   ).map(it => it()))
@@ -203,9 +221,8 @@ export const getCourses = (
   const httpAdminUser = httpUser(token)
 
   const coursesList = await httpAdminUser.get(
-    "/courses", 
+    "https://ubademy-courses-api.herokuapp.com/courses?skip=0&limit=999999999", 
     CourseListT,
-    true
   )()
 
   return coursesList
@@ -222,9 +239,29 @@ export const getExams = (
   const httpAdminUser = httpUser(token)
 
   const examsList = await httpAdminUser.get(
-    `/courses/${args.courseId}/exams`, 
+    `https://ubademy-courses-api.herokuapp.com/courses/${args.courseId}/exams`, 
     ExamListT,
-    true
+  )()
+
+  return examsList
+}
+
+export const getMetrics = (
+  args:{
+    credentials: Credentials
+    startDate?: string
+    endDate?: string
+  }
+): Async<MetricList> => async() => {
+
+  const token = args.credentials.token
+  const httpAdminUser = httpUser(token)
+  const rangeDate = args.startDate !== undefined && args.endDate !== undefined ?
+    `?start=${args.startDate}&end=${args.endDate}` : ""
+
+  const examsList = await httpAdminUser.get(
+    `https://ubademy-metrics-api.herokuapp.com/service/users${rangeDate}`, 
+    MetricListT,
   )()
 
   return examsList
