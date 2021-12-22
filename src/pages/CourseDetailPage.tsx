@@ -73,18 +73,48 @@ export const CourseDetailPage = () => {
               <Col
                 padding={20}
               >
-                  <Text text={"Detalle del curso "} bold fontSize={30}/>
-                  <Separator style={{marginBottom: 20}}/>
-                  <Text text={`• Id del curso: ${getCourseAsync.result.course.id}`} fontSize={20}/>
-                  <Text text={`• Nombre del curso: ${getCourseAsync.result.course.title}`} fontSize={20}/>
-                  <Text text={`• Detalle del curso: ${getCourseAsync.result.course.description}`} fontSize={20}/>
-                  <Text text={`• Tipo de curso: ${getCourseAsync.result.course.type}`} fontSize={20}/>
-                  <Text text={`• Id del creador: ${getCourseAsync.result.creator}`} fontSize={20}/>
-                  <Text text={`• Tipo de subscripción: ${getCourseAsync.result.course.subscription}`} fontSize={20}/>
-                  <Text text={`• Locación: ${getCourseAsync.result.course.location}`} fontSize={20}/>
-                  <Text text={`• Cantidad de alumnos: ${getCourseAsync.result.course.students.length}`} fontSize={20}/>
-                  <Text text={`• Cantidad de colaboradores: ${getCourseAsync.result.collaborators.length}`} fontSize={20}/>
-                  <Text text={`• Cantidad de examenes: ${getCourseAsync.result.course.exams.length}`} fontSize={20}/>
+                <Text text={"Detalle del curso "} bold fontSize={30}/>
+                <Separator style={{marginBottom: 20}}/>
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Id del curso: ${getCourseAsync.result.course.id}`} fontSize={20}/>
+                </Row>
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Nombre del curso: ${getCourseAsync.result.course.title}`} fontSize={20}/>
+                </Row>
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Detalle del curso: ${getCourseAsync.result.course.description}`} fontSize={20}/>
+                </Row>
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Tipo de curso: ${getCourseAsync.result.course.type}`} fontSize={20}/>
+                </Row>
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Id del creador: ${getCourseAsync.result.creator}`} fontSize={20}/>
+                </Row>
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Tipo de subscripción: ${getCourseAsync.result.course.subscription}`} fontSize={20}/>
+                </Row>
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Locación: ${getCourseAsync.result.course.location}`} fontSize={20}/>
+                </Row>
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Cantidad de alumnos: ${getCourseAsync.result.course.students.length}`} fontSize={20}/>
+                </Row>
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Cantidad de colaboradores: ${getCourseAsync.result.collaborators.length}`} fontSize={20}/>
+                </Row>
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Cantidad de examenes: ${getCourseAsync.result.course.exams.length}`} fontSize={20}/>
+                </Row>
               </Col>
             </Paper>
             <Paper 
@@ -96,9 +126,26 @@ export const CourseDetailPage = () => {
               >
                   <Text text={"Detalle del creador "} bold fontSize={30}/>
                   <Separator style={{marginBottom: 20}}/>
-                  <Text text={`• Id: ${getCourseAsync.result.creator.id}`} fontSize={20}/>
-                  <Text text={`• Apellido y nombre: ${getCourseAsync.result.creator.lastName} ${getCourseAsync.result.creator.firstName}`} fontSize={20}/>
-                  <Text text={`• Email: ${getCourseAsync.result.creator.email}`} fontSize={20}/>
+                  <Row  alignChildren="center">
+                    <CheckCircle color={"primary"} style={{padding: 5}}/>
+                    <Text text={`Id: ${getCourseAsync.result.creator.id}`} fontSize={20}/>
+                  </Row>
+                  <Row  alignChildren="center">
+                    <CheckCircle color={"primary"} style={{padding: 5}}/>
+                    <Text 
+                      text={
+                        `Apellido y nombre: 
+                        ${getCourseAsync.result.creator.googleData?.displayName !== undefined ? 
+                          getCourseAsync.result.creator.googleData?.displayName : 
+                          getCourseAsync.result.creator.lastName + " "+ getCourseAsync.result.creator.firstName}`
+                      } 
+                      fontSize={20}
+                    />
+                  </Row>
+                  <Row  alignChildren="center">
+                    <CheckCircle color={"primary"} style={{padding: 5}}/>
+                    <Text text={`Email: ${getCourseAsync.result.creator.email}`} fontSize={20}/>
+                  </Row>
               </Col>
             </Paper>
           </Row>
@@ -187,8 +234,10 @@ export const CourseDetailPage = () => {
                             >
                               <CheckCircle color={"primary"} style={{padding: 5}}/>
                               <Text 
-                                  text={`${collaborator.lastName} ${collaborator.firstName}`}
-                                  bold
+                                text={`${collaborator.googleData?.displayName !== undefined ?  
+                                  collaborator.googleData?.displayName : collaborator.lastName + " " +collaborator.firstName}`
+                                }
+                                bold
                               />
                             </Row>
                             <Button

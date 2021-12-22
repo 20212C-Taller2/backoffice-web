@@ -14,9 +14,10 @@ import Block from "@material-ui/icons/Block"
 import Check from "@material-ui/icons/Check"
 import { Window } from "../primitives/Window"
 import { setTo, useStatefull } from "../utils/state"
-import { sequenceIO } from "../utils/functional"
 import Alert from "@material-ui/lab/Alert"
 import Success from "@material-ui/icons/Done"
+import { Picture } from "../primitives/Picture"
+import AccountCircle from "@material-ui/icons/AccountCircle"
 
 
 export const UserDetailPage = () => {
@@ -28,10 +29,14 @@ export const UserDetailPage = () => {
   const id = splitedPathname[(splitedPathname.length)-1]
 
   const getUserAsync = useAsynchronous(adminUser.actions.getUser)
+  const totalName = 
+      getUserAsync.result?.googleData?.displayName !== undefined ? 
+        getUserAsync.result?.googleData?.displayName :
+        `${getUserAsync.result?.lastName ?? ""} ${getUserAsync.result?.firstName ?? ""}`
 
   const runGetUserAsync = getUserAsync.run({credentials: adminUser.credentials, userId: id})
   useEffect(runGetUserAsync, [id])
-
+ 
   return (
     <Col
       fill
@@ -39,13 +44,15 @@ export const UserDetailPage = () => {
     >
       {
         getUserAsync.result !== undefined && getUserAsync.status === "completed"?
-        <>
+        <Col
+          fill
+        >
           <Row
             style={{borderBottom: "2px solid lightgray", marginBottom: 40, minHeight: "max-content"}}
             justifyChildren="start"
           >
             <Text 
-              text={`Usuario: ${getUserAsync.result.lastName} ${getUserAsync.result.firstName}`} 
+              text={`Usuario: ${totalName}`} 
               bold 
               fontSize={40}
               fill
@@ -66,23 +73,76 @@ export const UserDetailPage = () => {
               />
             </Row>
           </Row>
-         
-          <Paper 
-            style={{ marginTop: 10, height:"auto"}} 
-            elevation={5}
+          <Row
+            fill
+            justifyChildren="spaceBetween"
+            style={{minHeight: "max-content"}}
+            margin={{top: 10}}
           >
-            <Col
-              padding={20}
+            <Paper 
+              style={{ height:"auto", width: "68%"}} 
+              elevation={5}
             >
+              <Col
+                padding={20}
+              >
                 <Text text={"Datos personales "} bold fontSize={30}/>
                 <Separator style={{marginBottom: 20}}/>
-                <Text text={`• Id de usuario: ${getUserAsync.result.id}`} fontSize={20}/>
-                <Text text={`• Apellido y nombre: ${getUserAsync.result.lastName} ${getUserAsync.result.firstName}`} fontSize={20}/>
-                <Text text={`• Email: ${getUserAsync.result.email}`} fontSize={20}/>
-            </Col>
-          </Paper>
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Id de usuario: ${getUserAsync.result.id}`} fontSize={20}/>
+                </Row>
+
+                    <Row  alignChildren="center">
+                      <CheckCircle color={"primary"} style={{padding: 5}}/>
+                      <Text 
+                        text={`Apellido y nombre: ${totalName}`} 
+                        fontSize={20}
+                      />
+                    </Row> 
+                  {
+                    getUserAsync.result.googleData !== undefined && getUserAsync.result.googleData.displayName !== undefined ?
+                      <Row  alignChildren="center">
+                        <CheckCircle color={"primary"} style={{padding: 5}}/>
+                        <Text 
+                          text={`Usuario con cuenta Google`} 
+                          fontSize={20}
+                        />
+                      </Row> 
+                      : null
+                  }
+                <Row  alignChildren="center">
+                  <CheckCircle color={"primary"} style={{padding: 5}}/>
+                  <Text text={`Email: ${getUserAsync.result.email}`} fontSize={20}/>
+                </Row>
+              </Col>
+            </Paper>
+            <Paper 
+              style={{ height:"auto", width: "30%"}} 
+              elevation={5}
+            >
+              <Col
+                padding={20}
+              >
+                <Text text={"Foto de perfil "} bold fontSize={30}/>
+                <Separator style={{marginBottom: 20}}/>
+                {
+                  getUserAsync.result.googleData?.picture !== undefined ?
+                    <Picture
+                      source={getUserAsync.result.googleData.picture}
+                      fit={"contain"}
+                      style={{maxHeight: 200}}
+                    /> : 
+                    <Col alignChildren="center">
+                      <AccountCircle style={{fontSize: 60}}/>
+                      <Text text={"El usuario aún no tiene foto de perfil"} margin={{top:20}} bold fontSize={20}/>
+                    </Col>
+                }
+              </Col>
+            </Paper>
+          </Row>
           <Paper 
-            style={{ marginTop: 10, height:"auto"}} 
+            style={{ marginTop: 40, height:"max-content"}} 
             elevation={5}
           >
             <Col
@@ -102,15 +162,11 @@ export const UserDetailPage = () => {
                         width={"100%"}
                         margin={{ bottom: 15 }}      
                       >
-
-
-
-                          <CheckCircle color={"primary"} style={{padding: 5}}/>
-                          <Text 
-                            text={field}
-                            bold
-                          />
-          
+                        <CheckCircle color={"primary"} style={{padding: 5}}/>
+                        <Text 
+                          text={field}
+                          bold
+                        />
                       </Row>
                     ) :
                     <Col alignChildren="center">
@@ -121,11 +177,13 @@ export const UserDetailPage = () => {
        
             </Col>
           </Paper>
+          <Separator height="2px" style={{marginTop:20}}/>
           <BlockUnblockButtons 
             userId={getUserAsync.result.id}
             blocked={getUserAsync.result.blocked}
+            margin={30}
           />
-        </> : 
+        </Col> : 
         <LoadingPage/> 
       }
 
@@ -138,6 +196,7 @@ export const BlockUnblockButtons = (
     userId: string
     blocked: boolean
     width?: number
+    margin?: number
   }
 ) => {
   const adminUser = useAdminUser()
@@ -155,6 +214,7 @@ export const BlockUnblockButtons = (
         alignChildren="center"
         justifyChildren="spaceEvenly"
         fill
+        margin={{top: props.margin}}
       >
         <Button
           style={{
@@ -163,7 +223,7 @@ export const BlockUnblockButtons = (
             borderRadius: 8,
             backgroundColor: props.blocked ? "#82c3e6" : "lightgray",
             padding: 5,
-            width: props.width ?? 250,
+            width: props.width ?? 250
           }}
           onClick={setTo(openConfirmWindow, true)}
           disabled={!props.blocked}

@@ -58,12 +58,19 @@ const AdminDataT = ProductOf({
 
 export const UserT = ProductOf({
   id: StringT,
-  firstName: StringT,
-  lastName: StringT,
+  firstName: OptionalOf(StringT),
+  lastName: OptionalOf(StringT),
   email: StringT,
-  placeId: StringT,
+  placeId: OptionalOf(StringT),
   interests: ListOf(StringT),
-  blocked: BooleanT
+  blocked: BooleanT,
+  googleData: OptionalOf(
+    ProductOf({
+      displayName: OptionalOf(StringT),
+      userId: OptionalOf(StringT),
+      picture: OptionalOf(StringT)
+    })
+  )
 })
 
 export const UserListT = ProductOf({

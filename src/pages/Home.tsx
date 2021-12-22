@@ -3,8 +3,6 @@ import { Col, Row } from "../primitives/Flexbox"
 import { Text } from "../primitives/Text"
 import Check from "@material-ui/icons/CheckCircle"
 
-
-
 export const Home = () => {
 
   return (
@@ -32,7 +30,7 @@ export const Home = () => {
       <Row  alignChildren="center" margin={15}>
         <Check color={"primary"} style={{padding: 5}}/>
         <Text 
-          text={" Agregar administrador: Agregar nuevo administrador al backoffice"}
+          text={"Administrar cursos: Listado de todos los cursos de la plataforma y opciones para crear y/o modificar los mismos"}
           color="#444444"
           fontSize={14}
           bold
@@ -41,7 +39,7 @@ export const Home = () => {
       <Row  alignChildren="center" margin={15}>
         <Check color={"primary"} style={{padding: 5}}/>
         <Text 
-          text={"Administrar cursos: Listado de todos los cursos de la plataforma y opciones para crear y/o modificar los mismos"}
+          text={" Agregar administrador: Agregar nuevo administrador al backoffice"}
           color="#444444"
           fontSize={14}
           bold

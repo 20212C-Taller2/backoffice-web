@@ -1,5 +1,7 @@
 import React from "react"
 import { Col } from "../primitives/Flexbox"
+import { Frame } from "../primitives/Frame"
+import { Footer } from "./Footer"
 import { Navbar } from "./Navbar"
 
 export const MainLayout = (
@@ -9,14 +11,14 @@ export const MainLayout = (
 ) => {
 
   return (
-    <Col
+    <Frame
       fill 
     >
       <Navbar/>
-      <Col fill >
+      <Frame fill>
         {props.children}
-      </Col>
-     
-    </Col>
+      </Frame>
+      <Footer/>
+    </Frame>
   )
 }

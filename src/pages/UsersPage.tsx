@@ -3,7 +3,7 @@ import { Button, Paper } from "@material-ui/core"
 import React, { useEffect } from "react"
 import { useAdminUser } from "../hooks/context"
 import { Col, Row } from "../primitives/Flexbox"
-import { Loading, LoadingPage } from "../primitives/Loading"
+import { LoadingPage } from "../primitives/Loading"
 import { Column, ContentCell, HeaderCell, listDataProvider, Table } from "../primitives/Table"
 import { Text } from "../primitives/Text"
 import { useAsynchronous } from "../utils/asynchronism"
@@ -11,7 +11,6 @@ import { List } from "../utils/list"
 import { User } from "../utils/serialization"
 import { ImageDefault } from "../components/ImageDefault"
 import AccountCircle from "@material-ui/icons/AccountCircle"
-import Block from "@material-ui/icons/Block"
 import { Navigation, useNavigation } from "../hooks/navigation"
 import { BlockUnblockButtons } from "./UserDetailPage"
 
@@ -21,11 +20,9 @@ export const UsersPage = () => {
   const adminUser = useAdminUser()
   const navigation = useNavigation()
   const getUsersAsync = useAsynchronous(adminUser.actions.getUsers)
-  console.log("getUsersAync.result")
   const runGetUsersAsync = getUsersAsync.run({credentials: adminUser.credentials})
   useEffect(runGetUsersAsync, [adminUser.credentials])
-  console.log("getUsersAync.result")
-  console.log(getUsersAsync)
+
   return (
     <Col
       fill
@@ -65,11 +62,18 @@ const columns = (
   },
   {
     header: <HeaderCell text={"Apellido y nombre"} textCenter />,
-    render: it =>
-      <ContentCell
-        text={`${it.lastName} ${it.firstName}`}
-        textCenter
-      />,
+    render: it => {
+      const totalName = 
+        it.googleData?.displayName !== undefined ? 
+          it.googleData.displayName :
+          `${it.lastName ?? ""} ${it.firstName ?? ""}`
+      return(
+        <ContentCell
+          text={totalName}
+          textCenter
+        />
+      )
+    },
     grow: 1,
     width: 0,
   },
@@ -87,7 +91,7 @@ const columns = (
     header: <HeaderCell text={"Id de orden"} textCenter />,
     render: it =>
       <ContentCell
-        text={it.placeId}
+        text={it.placeId ?? "-"}
         textCenter
       />,
     grow: 1,

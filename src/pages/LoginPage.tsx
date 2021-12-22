@@ -33,62 +33,61 @@ export const Login = () => {
   const runLogin = login.run({username: credentials.value.username, password: credentials.value.password})
 
   return (
-    <Frame
+    <Col
       centerHorizontal
       width={"30%"}
       padding={40}
+      height={"max-content"}
+      alignChildren="center"
     >
-      <Col
-        alignChildren="center"
+
+      <Picture source={iconUbademy} width={200}/>
+      <Text text={"Ubademy"} fontSize={25} />
+      <StringEditor 
+        style={{ width: "100%", marginTop: 30, marginBottom:30 }}
+        prefix={<Person style={{ margin: 4, color: "#666666" } } />}
+        label={"Correo Electrónico"}
+        key={"Usuario"}
+        placeholder={"Ingresar usuario"}
+        type="email"
+        state={applyLens(credentials, lens("username"))}
+        showErrors={false}
+        errorList={["Usuario o contraseña incorrecta"]}
+        onKeyPressed={key => key === "Enter" ? runLogin : nop }
+      />
+      <StringEditor 
+        style={{ width: "100%" }}
+        prefix={<Lock style={{ margin: 4, color: "#666666"} } />}
+        label={"Contraseña"}
+        key={"Password"}
+        placeholder={"Ingresar contraseña"}
+        type="password"
+        showErrors={false}
+        state={applyLens(credentials, lens("password"))}
+        onKeyPressed={key => key === "Enter" ? runLogin : nop }
+        showPassword={showPassword}
+      /> 
+      {
+        login.status === "failed" ? 
+          <Alert style={{marginTop: 15}} severity="error">Correo electrónico o contraseña incorrecta</Alert> : 
+          null
+      }
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        color="primary"
+        style={{marginTop: 30}}
+        onClick={runLogin}
       >
-        <Picture source={iconUbademy} />
-        <Text text={"Ubademy"} fontSize={25} />
-        <StringEditor 
-          style={{ width: "100%", marginTop: 30, marginBottom:30 }}
-          prefix={<Person style={{ margin: 4, color: "#666666" } } />}
-          label={"Correo Electrónico"}
-          key={"Usuario"}
-          placeholder={"Ingresar usuario"}
-          type="email"
-          state={applyLens(credentials, lens("username"))}
-          showErrors={false}
-          errorList={["Usuario o contraseña incorrecta"]}
-          onKeyPressed={key => key === "Enter" ? runLogin : nop }
-        />
-        <StringEditor 
-          style={{ width: "100%" }}
-          prefix={<Lock style={{ margin: 4, color: "#666666"} } />}
-          label={"Contraseña"}
-          key={"Password"}
-          placeholder={"Ingresar contraseña"}
-          type="password"
-          showErrors={false}
-          state={applyLens(credentials, lens("password"))}
-          onKeyPressed={key => key === "Enter" ? runLogin : nop }
-          showPassword={showPassword}
-        /> 
         {
-          login.status === "failed" ? 
-            <Alert style={{marginTop: 15}} severity="error">Correo electrónico o contraseña incorrecta</Alert> : 
-            null
+          login.status === "running" ?
+            <Loading style={{ width: 25, height: 25, marginRight: 15, color: "white" }}/> 
+            : null 
         }
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          style={{marginTop: 30}}
-          onClick={runLogin}
-        >
-          {
-            login.status === "running" ?
-              <Loading style={{ width: 25, height: 25, marginRight: 15, color: "white" }}/> 
-              : null 
-          }
-            Ingresar
-        </Button>
-      </Col>
-    </Frame>
+          Ingresar
+      </Button>
+    </Col>
   )
 }
 

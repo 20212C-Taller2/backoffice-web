@@ -105,7 +105,7 @@ const columns = (
         text={it.students.length.toString()}
         textCenter
       />,
-    grow: 1,
+    grow: 0.1,
     width: 0,
   },
   {
@@ -115,7 +115,7 @@ const columns = (
         text={it.collaborators.length.toString()}
         textCenter
       />,
-    grow: 1,
+    grow: 0.1,
     width: 0,
   },
   {
@@ -125,7 +125,7 @@ const columns = (
         text={it.exams.length.toString()}
         textCenter
       />,
-    grow: 1,
+    grow: 0.1,
     width: 0,
   },
   {

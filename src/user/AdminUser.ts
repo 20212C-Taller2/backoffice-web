@@ -109,7 +109,7 @@ export const registerAdminAsync = (
   }
 
   await httpAdminUser.post(
-    "https://ubademy-users-api.herokuapp.com/register/admin", 
+    "https://ubademy-apigateway.herokuapp.com/users/register/admin", 
     registerAdminBody,
     VoidT
   )()
@@ -125,7 +125,7 @@ export const getUsers = (
   const httpAdminUser = httpUser(token)
 
   const userList = await httpAdminUser.get(
-    "https://ubademy-users-api.herokuapp.com/users?skip=0&limit=999999999", 
+    "https://ubademy-apigateway.herokuapp.com/users?skip=0&limit=999999999", 
     UserListT
   )()
 
@@ -143,7 +143,7 @@ export const getUser = (
   const httpAdminUser = httpUser(token)
 
   const user = await httpAdminUser.get(
-    `https://ubademy-users-api.herokuapp.com/users/${args.userId}`, 
+    `https://ubademy-apigateway.herokuapp.com/users/${args.userId}`, 
     UserT
   )()
 
@@ -162,12 +162,12 @@ export const blockUnblockUser = (
   const httpAdminUser = httpUser(token)
   const adminOperation = args.block ? 
     httpAdminUser.post(
-      `https://ubademy-users-api.herokuapp.com/users/${args.userId}/block`, 
+      `https://ubademy-apigateway.herokuapp.com/users/${args.userId}/block`, 
       undefined,
       VoidT
     ) :
     httpAdminUser.delete(
-      `https://ubademy-users-api.herokuapp.com/users/${args.userId}/block`, 
+      `https://ubademy-apigateway.herokuapp.com/users/${args.userId}/block`, 
       VoidT
     )
   await adminOperation()
@@ -184,12 +184,12 @@ export const getCourse = (
   const httpAdminUser = httpUser(token)
 
   const fetchCourse = await httpAdminUser.get(
-    `https://ubademy-courses-api.herokuapp.com/courses/${args.courseId}`, 
+    `https://ubademy-apigateway.herokuapp.com/courses/${args.courseId}`, 
     CourseT,
   )()
 
   const fetchCreator = await httpAdminUser.get(
-    `https://ubademy-users-api.herokuapp.com/users/${fetchCourse.creator}`, 
+    `https://ubademy-apigateway.herokuapp.com/users/${fetchCourse.creator}`, 
     UserT
   )()
   
@@ -197,7 +197,7 @@ export const getCourse = (
   const fetchCollaborators = await Promise.all(
     fetchCourse.collaborators.map(it =>
       httpAdminUser.get(
-        `https://ubademy-users-api.herokuapp.com/users/${it}`, 
+        `https://ubademy-apigateway.herokuapp.com/users/${it}`, 
         UserT
       )
   ).map(it => it()))
@@ -221,7 +221,7 @@ export const getCourses = (
   const httpAdminUser = httpUser(token)
 
   const coursesList = await httpAdminUser.get(
-    "https://ubademy-courses-api.herokuapp.com/courses?skip=0&limit=999999999", 
+    "https://ubademy-apigateway.herokuapp.com/courses?skip=0&limit=999999999", 
     CourseListT,
   )()
 
@@ -239,7 +239,7 @@ export const getExams = (
   const httpAdminUser = httpUser(token)
 
   const examsList = await httpAdminUser.get(
-    `https://ubademy-courses-api.herokuapp.com/courses/${args.courseId}/exams`, 
+    `https://ubademy-apigateway.herokuapp.com/courses/${args.courseId}/exams`, 
     ExamListT,
   )()
 

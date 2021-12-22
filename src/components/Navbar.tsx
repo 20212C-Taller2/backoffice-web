@@ -15,7 +15,7 @@ export const Navbar = () => {
 
   return(
     <Row 
-      style={{ backgroundColor: "#282C34" }} 
+      style={{ backgroundColor: "#282C34", minHeight: "max-content" }} 
       alignChildren="center" 
       justifyChildren="spaceBetween"
       padding={5}

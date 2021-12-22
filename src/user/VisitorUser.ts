@@ -11,8 +11,6 @@ export type VisitorUser = {
 
 export type VisitorActions = {
     login: (args: { username: string, password: string }) => Async<void>
-    
-    //signUp: () => Async<void>
 }
 
 export const buildVisitorUser = (
@@ -35,7 +33,7 @@ export const buildVisitorUser = (
         }
         
         const fetchCredentials  =  await httpVisitorUser.post(
-          "https://ubademy-users-api.herokuapp.com/login/admin", 
+          "https://ubademy-apigateway.herokuapp.com/users/login/admin", 
           bodyLogin,
           CredentialsT
         )()

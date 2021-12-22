@@ -1,9 +1,7 @@
 import React, { useEffect } from "react"
 import { Col, Row } from "../primitives/Flexbox"
 import { Text } from "../primitives/Text"
-import Check from "@material-ui/icons/CheckCircle"
 import { useAdminUser } from "../hooks/context"
-import { useNavigation } from "../hooks/navigation"
 import { useAsynchronous } from "../utils/asynchronism"
 import {
   Chart as ChartJS,
@@ -24,6 +22,8 @@ import { DateEditor } from "../primitives/DateEditor"
 import { setTo, useStatefull } from "../utils/state"
 import { LocalDate, DateTimeFormatter } from "js-joda"
 import { Button, FormControl, InputLabel, MenuItem, Select } from "@material-ui/core"
+import Sad from "@material-ui/icons/SentimentDissatisfied"
+import { Frame } from "../primitives/Frame"
 
 const formatDate = (date: LocalDate | undefined) => 
   date === undefined ? undefined :
@@ -39,7 +39,7 @@ ChartJS.register(
   Legend
 )
 
-const options = (graphicType: "pie" | "bars") => ({
+const options = (graphicType: "pie" | "bars", startDate?: string, endDate?: string) => ({
   indexAxis: graphicType === "bars" ? 'y' as const : undefined,
   elements: {
     bar: {
@@ -53,8 +53,13 @@ const options = (graphicType: "pie" | "bars") => ({
       display: graphicType === "bars" ? false : true,
     },
     title: {
-      display: false,
-      text: 'Metricas',
+      display: true,
+      text: 
+        startDate === undefined && endDate === undefined ? 
+          'Metricas de hoy' :
+          (startDate === endDate) || startDate === undefined || endDate === undefined ?
+            `Métricas del día ${startDate ?? endDate}` :
+            `Métricas desde el día ${startDate} hasta el día ${endDate}`
     },
   }
 })
@@ -106,14 +111,14 @@ export const MetricsPage = () => {
   const openSelect = useStatefull(() => false)
 
   const getMetricsAsync = useAsynchronous(adminUser.actions.getMetrics)
-  const runGetMetricsAsync = getMetricsAsync.run({
+  const runGetMetricsAsync = (startDate?: string, endDate?: string) => getMetricsAsync.run({
     credentials: adminUser.credentials, 
-    startDate: formatDate(startDate.value),
-    endDate: formatDate(endDate.value)
+    startDate: startDate,
+    endDate: endDate
   })
   
-  useEffect(runGetMetricsAsync, [adminUser.credentials])
-console.log(graphicType.value)
+  useEffect(runGetMetricsAsync(), [adminUser.credentials.user.id])
+
   return (
     <Col 
       fill
@@ -162,7 +167,6 @@ console.log(graphicType.value)
                       setTo(graphicType, event.target.value as ("bars" | "pie"))()
                     }
                   >
-                    
                     <MenuItem value={"bars"} children={"Barras"}/>
                     <MenuItem value={"pie"} children={"Torta"}/>
                   </Select>
@@ -172,24 +176,55 @@ console.log(graphicType.value)
                   type="submit"
                   style={{width: "20%"}}
                   variant="contained"
-                  onClick={runGetMetricsAsync}
+                  onClick={runGetMetricsAsync(formatDate(startDate.value), formatDate(endDate.value))}
                 >
-                <Text fill text={"Visualizar Métricas"}/>
-              </Button>
-              </Row>  
-              <Row
-                margin={ graphicType.value === "bars" ? {top: 50} : { left: "25%"}}
-                width={graphicType.value === "bars" ? undefined : "50%"}
-              >
-                { 
-                  graphicType.value === "bars" ?
-                    <Bar options={options("bars")} data={formatData(getMetricsAsync.result)} /> :
-                    <Pie options={options("pie")} data={formatData(getMetricsAsync.result)} />
-                }
+                  <Text fill text={"Visualizar Métricas"}/>
+                </Button>
               </Row>
+              
+              {
+                getMetricsAsync.result.metrics.length !== 0 ?
+                  <Col
+                    margin={{top: 100}}
+                    width={graphicType.value === "bars" ? "65%" : "40%"}
+                    centerInParent
+                  >
+                    { 
+                      graphicType.value === "bars" ?
+                        <Bar 
+                          options={options("bars", startDate.value?.toString(), endDate.value?.toString())} 
+                          data={formatData(getMetricsAsync.result)} 
+                          
+                        /> :
+                        <Pie 
+                          options={options("pie", startDate.value?.toString(), endDate.value?.toString())} 
+                          data={formatData(getMetricsAsync.result)} 
+                          
+                        />
+                    }
+                  </Col> :
+                  <Col alignChildren="center" margin={{top: 100}}>
+                    <Sad style={{fontSize: 60, color: "#444444"}}/>
+                    <Text 
+                      text={"No hubo actividad durante el período seleccionado"} 
+                      margin={{top:20}} 
+                      bold 
+                      fontSize={20}
+                      color="#444444"
+                    />
+                    <Text 
+                      text={"Por favor, intentelo con otras fechas"} 
+                      margin={{top:20}} 
+                      bold 
+                      fontSize={20}
+                      color="#444444"
+                    />
+                  </Col>
+                }
             </> :
             <LoadingPage/>
       }
     </Col>
+   
   )
 }
