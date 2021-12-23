@@ -28,7 +28,7 @@ export const CoursesPage = () => {
     >
       {
         getCoursesAync.result !== undefined && getCoursesAync.status === "completed"?
-          <Paper style={{ marginTop: 10, height:"auto"}} elevation={1}>
+          <Paper style={{ marginTop: 10, height:"auto"}} elevation={5}>
             <Table<Course>
               provider={listDataProvider(getCoursesAync.result)}
               pageSize={10}
@@ -92,7 +92,7 @@ const columns = (
     header: <HeaderCell text={"Id del creador"} textCenter />,
     render: it =>
       <ContentCell
-        text={it.title}
+        text={it.creator}
         textCenter
       />,
     grow: 1,

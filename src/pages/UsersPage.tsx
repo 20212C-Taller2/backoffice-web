@@ -30,7 +30,7 @@ export const UsersPage = () => {
     >
       {
         getUsersAsync.result !== undefined && getUsersAsync.status === "completed"?
-          <Paper style={{ marginTop: 10, height:"auto"}} elevation={1}>
+          <Paper style={{ marginTop: 10, height:"auto"}} elevation={5}>
             <Table<User>
               provider={listDataProvider(getUsersAsync.result)}
               pageSize={10}

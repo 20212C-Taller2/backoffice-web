@@ -93,10 +93,6 @@ export const CourseDetailPage = () => {
                 </Row>
                 <Row  alignChildren="center">
                   <CheckCircle color={"primary"} style={{padding: 5}}/>
-                  <Text text={`Id del creador: ${getCourseAsync.result.creator}`} fontSize={20}/>
-                </Row>
-                <Row  alignChildren="center">
-                  <CheckCircle color={"primary"} style={{padding: 5}}/>
                   <Text text={`Tipo de subscripción: ${getCourseAsync.result.course.subscription}`} fontSize={20}/>
                 </Row>
                 <Row  alignChildren="center">
